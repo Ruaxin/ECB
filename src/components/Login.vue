@@ -6,7 +6,7 @@
         <img src="../assets/PorygonZ.png" alt="PorygonZ">
       </div>
       <!--登录表单区-->
-      <el-form class="login_form" :model="loginForm" :rules="loginFormRules">
+      <el-form ref="loginFormRef" class="login_form" :model="loginForm" :rules="loginFormRules">
         <!--用户名-->
         <el-form-item prop="username">
           <el-input prefix-icon="iconfont icon-user" v-model="loginForm.username"></el-input>
@@ -18,7 +18,7 @@
         <!--按钮-->
         <el-form-item class="btns">
           <el-button type="primary">登录</el-button>
-          <el-button type="info">重置</el-button>
+          <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -37,14 +37,38 @@ export default {
       // 验证合法
       loginFormRules: {
         username: [
-          { required: true, message: '请输入登录名称', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+          {
+            required: true,
+            message: '请输入登录名称',
+            trigger: 'blur'
+          },
+          {
+            min: 3,
+            max: 10,
+            message: '长度在 3 到 10 个字符',
+            trigger: 'blur'
+          }
         ],
         password: [
-          { required: true, message: '请输入登录密码', trigger: 'blur' },
-          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+          {
+            required: true,
+            message: '请输入登录密码',
+            trigger: 'blur'
+          },
+          {
+            min: 6,
+            max: 15,
+            message: '长度在 6 到 15 个字符',
+            trigger: 'blur'
+          }
         ]
       }
+    }
+  },
+  methods: {
+    resetLoginForm () {
+      // resetFields方法是ele提供的
+      this.$refs.loginFormRef.resetFields()
     }
   }
 }
