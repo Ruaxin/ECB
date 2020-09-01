@@ -26,57 +26,64 @@
 </template>
 
 <script>
-export default {
-  name: 'Login',
-  data () {
-    return {
-      loginForm: {
-        username: '',
-        password: ''
+  export default {
+    name: 'Login',
+    data () {
+      return {
+        loginForm: {
+          username: '',
+          password: ''
+        },
+        // 验证合法
+        loginFormRules: {
+          username: [
+            {
+              required: true,
+              message: '请输入登录名称',
+              trigger: 'blur'
+            },
+            {
+              min: 3,
+              max: 10,
+              message: '长度在 3 到 10 个字符',
+              trigger: 'blur'
+            }
+          ],
+          password: [
+            {
+              required: true,
+              message: '请输入登录密码',
+              trigger: 'blur'
+            },
+            {
+              min: 6,
+              max: 15,
+              message: '长度在 6 到 15 个字符',
+              trigger: 'blur'
+            }
+          ]
+        }
+      }
+    },
+    methods: {
+      resetLoginForm () {
+        // resetFields方法是ele提供的
+        this.$refs.loginFormRef.resetFields()
       },
-      // 验证合法
-      loginFormRules: {
-        username: [
-          {
-            required: true,
-            message: '请输入登录名称',
-            trigger: 'blur'
-          },
-          {
-            min: 3,
-            max: 10,
-            message: '长度在 3 到 10 个字符',
-            trigger: 'blur'
+      login () {
+        this.$refs.loginFormRef.validate(async (valid) => {
+          if (valid) {
+            const { data: res } = await this.$http.post('login', this.loginForm)
+            if (res.meta.status === 200) {
+              this.$message.success('登录成功')
+            } else {
+              this.$message.error('登录失败！')
+            }
           }
-        ],
-        password: [
-          {
-            required: true,
-            message: '请输入登录密码',
-            trigger: 'blur'
-          },
-          {
-            min: 6,
-            max: 15,
-            message: '长度在 6 到 15 个字符',
-            trigger: 'blur'
-          }
-        ]
+        })
       }
     }
-  },
-  methods: {
-    resetLoginForm () {
-      // resetFields方法是ele提供的
-      this.$refs.loginFormRef.resetFields()
-    },
-    login () {
-      this.$refs.loginFormRef.validate((valid) => {
-        console.log(valid)
-      })
-    }
   }
-}
 </script>
 
 <style lang="scss" scoped>
