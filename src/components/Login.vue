@@ -31,8 +31,8 @@
     data () {
       return {
         loginForm: {
-          username: '',
-          password: ''
+          username: 'admin',
+          password: '123456'
         },
         // 验证合法
         loginFormRules: {
@@ -76,8 +76,14 @@
             const { data: res } = await this.$http.post('login', this.loginForm)
             if (res.meta.status === 200) {
               this.$message.success('登录成功')
+              //存入token
+              window.sessionStorage.setItem('token', res.data.token)
+              //跳转到个人中心
+              await this.$router.push('/home')
+              console.log(res)
             } else {
               this.$message.error('登录失败！')
+              console.log(res)
             }
           }
         })

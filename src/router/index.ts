@@ -1,16 +1,29 @@
-import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
-import Login from '@/components/Login.vue'
+import Vue from 'vue';
+import VueRouter, {RouteConfig} from 'vue-router';
+import Login from '@/components/Login.vue';
+import Home from '@/components/Home.vue';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
-  { path: '/', redirect: '/login' }, // 重定向
-  { path: '/login', component: Login }
-]
+  {path: '/', redirect: '/login'}, // 重定向
+  {path: '/login', component: Login},
+  {path: '/home', component: Home}
+];
 
 const router = new VueRouter({
   routes
-})
+});
 
-export default router
+//路由导航守卫
+router.beforeEach((to, form, next) => {
+  // 如果是login,就放行
+  if (to.path === '/login') return next();
+  //获取token
+  const tokenStr = window.sessionStorage.getItem('token');
+  //如果没有token，就让他登录
+  if (!tokenStr) return next('/login');
+  next();
+});
+
+export default router;
