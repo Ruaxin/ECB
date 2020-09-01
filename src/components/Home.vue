@@ -10,11 +10,14 @@
       </el-header>
       <el-container>
         <!--侧边栏-->
-        <el-aside width="200px">
+        <el-aside :width="isCollapse? '64px' : '200px'">
+          <div class="toggle-button" @click="toggleCollapse">|||</div>
           <el-menu
             background-color="#de7f8b"
             text-color="#333c4f"
             :unique-opened="true"
+            :collapse="isCollapse"
+            :collapse-transition="false"
             active-text-color="#ffd04b">
             <!--一级菜单-->
             <el-submenu :index="item.id+''" v-for="item in menuList" :key="item.id">
@@ -53,7 +56,8 @@
           '101': 'iconfont icon-shangpin',
           '102': 'iconfont icon-danju',
           '145': 'iconfont icon-baobiao',
-        }
+        },
+        isCollapse: false
       }
     },
     methods: {
@@ -69,6 +73,9 @@
           this.menuList = res.data
         }
         console.log(res)
+      },
+      toggleCollapse () {
+        this.isCollapse = !this.isCollapse
       }
     }
   }
@@ -77,24 +84,29 @@
 <style lang="scss" scoped>
   .home-container {
     height: 100vh;
-  }
 
-  .el-header {
-    background-color: #f7ce78;
-    display: flex;
-    justify-content: space-between;
-    padding-left: 6px;
-    align-items: center;
-    color: #333c4f;
-    font-size: 20px;
-    font-weight: bold;
-
-    > div {
+    > .el-header {
+      background-color: #f7ce78;
       display: flex;
+      justify-content: space-between;
+      padding-left: 6px;
       align-items: center;
+      color: #333c4f;
+      font-size: 20px;
+      font-weight: bold;
 
-      > span {
-        margin-left: 12px;
+      > div {
+        display: flex;
+        align-items: center;
+
+        > .ball {
+          width: 56px;
+          height: 56px;
+        }
+
+        > span {
+          margin-left: 12px;
+        }
       }
     }
   }
@@ -113,16 +125,22 @@
     background-color: #76bacc;
   }
 
-  .ball {
-    width: 56px;
-    height: 56px;
-  }
-
   .iconfont {
     margin-right: 6px;
   }
 
   .el-icon-s-help {
     color: #333c4f;
+  }
+
+  .toggle-button {
+    background-color: #cf5568;
+    font-size: 16px;
+    line-height: 36px;
+    color: #333c4f;
+    text-align: center;
+    letter-spacing: 0.6em;
+    cursor: pointer;
+    font-weight: bold;
   }
 </style>
