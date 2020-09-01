@@ -3,13 +3,34 @@
     <el-container class="home-container">
       <el-header>
         <div>
-          <img src="../assets/Gengar.png" alt="Gengar" class="gengar">
+          <img src="../assets/Ball.png" alt="Ball" class="ball">
           <span>电商后台管理系统</span>
         </div>
         <el-button type="info" @click="logout">退出</el-button>
       </el-header>
       <el-container>
-        <el-aside width="200px">Aside</el-aside>
+        <!--侧边栏-->
+        <el-aside width="200px">
+          <el-menu
+            background-color="#cf5568"
+            text-color="#fff"
+            active-text-color="#ffd04b">
+            <!--一级菜单-->
+            <el-submenu index="1">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>导航一</span>
+              </template>
+              <!--二级菜单-->
+              <el-menu-item index="1-4-1">
+                <template slot="title">
+                  <i class="el-icon-location"></i>
+                  <span>二级</span>
+                </template>
+              </el-menu-item>
+            </el-submenu>
+          </el-menu>
+        </el-aside>
         <el-main>Main</el-main>
       </el-container>
     </el-container>
@@ -39,8 +60,9 @@
     justify-content: space-between;
     padding-left: 6px;
     align-items: center;
-    color: #716696;
+    color: #333c4f;
     font-size: 20px;
+    font-weight: bold;
 
     > div {
       display: flex;
@@ -60,7 +82,7 @@
     background-color: #76bacc;
   }
 
-  .gengar {
+  .ball {
     width: 56px;
     height: 56px;
   }
