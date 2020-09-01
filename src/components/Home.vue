@@ -12,20 +12,20 @@
         <!--侧边栏-->
         <el-aside width="200px">
           <el-menu
-            background-color="#cf5568"
-            text-color="#fff"
+            background-color="#de7f8b"
+            text-color="#333c4f"
             active-text-color="#ffd04b">
             <!--一级菜单-->
-            <el-submenu index="1">
+            <el-submenu :index="item.id+''" v-for="item in menuList" :key="item.id">
               <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>导航一</span>
+                <i :class="iconsObj[item.id]"></i>
+                <span>{{item.authName}}</span>
               </template>
               <!--二级菜单-->
-              <el-menu-item index="1-4-1">
+              <el-menu-item :index="subItem.id+''" v-for="subItem in item.children" :key="subItem.id">
                 <template slot="title">
-                  <i class="el-icon-location"></i>
-                  <span>二级</span>
+                  <i class="el-icon-s-help"></i>
+                  <span>{{subItem.authName}}</span>
                 </template>
               </el-menu-item>
             </el-submenu>
@@ -40,10 +40,34 @@
 <script>
   export default {
     name: 'Home',
+    created () {
+      this.getMenuList()
+    },
+    data () {
+      return {
+        menuList: [],
+        iconsObj: {
+          '125': 'iconfont icon-user',
+          '103': 'iconfont icon-tijikongjian',
+          '101': 'iconfont icon-shangpin',
+          '102': 'iconfont icon-danju',
+          '145': 'iconfont icon-baobiao',
+        }
+      }
+    },
     methods: {
+      // 登录
       logout () {
         window.sessionStorage.clear()
         this.$router.push('/login')
+      },
+      // 获取侧边栏菜单
+      async getMenuList () {
+        const { data: res } = await this.$http.get('menus')
+        if (res.meta.status === 200) {
+          this.menuList = res.data
+        }
+        console.log(res)
       }
     }
   }
@@ -75,7 +99,8 @@
   }
 
   .el-aside {
-    background-color: #cf5568;
+    background-color: #de7f8b;
+    font-weight: 600;
   }
 
   .el-main {
@@ -85,5 +110,9 @@
   .ball {
     width: 56px;
     height: 56px;
+  }
+
+  .iconfont {
+    margin-right: 6px;
   }
 </style>
