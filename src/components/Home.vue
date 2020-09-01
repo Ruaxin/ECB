@@ -14,6 +14,7 @@
           <el-menu
             background-color="#de7f8b"
             text-color="#333c4f"
+            :unique-opened="true"
             active-text-color="#ffd04b">
             <!--一级菜单-->
             <el-submenu :index="item.id+''" v-for="item in menuList" :key="item.id">
@@ -101,6 +102,11 @@
   .el-aside {
     background-color: #de7f8b;
     font-weight: 600;
+
+    > .el-menu {
+      border-right: none;
+    }
+
   }
 
   .el-main {
@@ -114,5 +120,9 @@
 
   .iconfont {
     margin-right: 6px;
+  }
+
+  .el-icon-s-help {
+    color: #333c4f;
   }
 </style>
