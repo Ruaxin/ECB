@@ -30,8 +30,8 @@
           <template v-slot="scope">
             <el-switch
               v-model="scope.row.mg_state"
-              active-color="#13ce66"
-              disabled>
+              @change="userStateChange(scope.row)"
+              active-color="#13ce66">
             </el-switch>
           </template>
         </el-table-column>
@@ -113,6 +113,17 @@
         if (res.meta.status === 200) {
           this.userList = res.data.users
           this.total = res.data.total
+        } else {
+          this.$message.error('获取用户列表失败')
+        }
+      },
+      // switch开关监听
+      async userStateChange (userinfo) {
+        const { data: res } = await this.$http.put(`users/${userinfo.id}/state/${userinfo.mg_state}`)
+        if (res.meta.status === 200) {
+          this.$message.success('更新用户状态成功')
+        } else {
+          this.$message.error('更新用户状态失败')
         }
       },
       handleSizeChange (newSize) {

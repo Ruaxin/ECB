@@ -85,7 +85,6 @@
         if (res.meta.status === 200) {
           this.menuList = res.data
         }
-        console.log(res)
       },
       toggleCollapse () {
         this.isCollapse = !this.isCollapse
