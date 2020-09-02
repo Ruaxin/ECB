@@ -6,14 +6,21 @@
         <img src="../assets/PorygonZ.png" alt="PorygonZ">
       </div>
       <!--登录表单区-->
-      <el-form ref="loginFormRef" class="login_form" :model="loginForm" :rules="loginFormRules">
+      <el-form
+        ref="loginFormRef"
+        class="login_form"
+        :model="loginForm"
+        :rules="loginFormRules">
         <!--用户名-->
         <el-form-item prop="username">
           <el-input prefix-icon="iconfont icon-user" v-model="loginForm.username"></el-input>
         </el-form-item>
         <!--密码-->
         <el-form-item prop="password">
-          <el-input type="password" prefix-icon="iconfont icon-3702mima" v-model="loginForm.password"></el-input>
+          <el-input type="password"
+                    prefix-icon="iconfont icon-3702mima"
+                    v-model="loginForm.password">
+          </el-input>
         </el-form-item>
         <!--按钮-->
         <el-form-item class="btns">

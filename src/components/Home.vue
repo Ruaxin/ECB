@@ -19,15 +19,23 @@
             :collapse="isCollapse"
             :collapse-transition="false"
             :router="true"
+            :default-active="activePath"
             active-text-color="#ffd04b">
             <!--一级菜单-->
-            <el-submenu :index="item.id+''" v-for="item in menuList" :key="item.id">
+            <el-submenu
+              :index="item.id+''"
+              v-for="item in menuList"
+              :key="item.id">
               <template slot="title">
                 <i :class="iconsObj[item.id]"></i>
                 <span>{{item.authName}}</span>
               </template>
               <!--二级菜单-->
-              <el-menu-item :index="'/'+subItem.path" v-for="subItem in item.children" :key="subItem.id">
+              <el-menu-item
+                :index="'/'+subItem.path"
+                @click="saveNavState('/'+subItem.path)"
+                v-for="subItem in item.children"
+                :key="subItem.id">
                 <template slot="title">
                   <i class="el-icon-s-help"></i>
                   <span>{{subItem.authName}}</span>
@@ -49,6 +57,7 @@
     name: 'Home',
     created () {
       this.getMenuList()
+      this.activePath = window.sessionStorage.getItem('activePath')
     },
     data () {
       return {
@@ -60,7 +69,8 @@
           '102': 'iconfont icon-danju',
           '145': 'iconfont icon-baobiao',
         },
-        isCollapse: false
+        isCollapse: false,
+        activePath: ''
       }
     },
     methods: {
@@ -79,6 +89,10 @@
       },
       toggleCollapse () {
         this.isCollapse = !this.isCollapse
+      },
+      saveNavState (activePath) {
+        window.sessionStorage.setItem('activePath', activePath)
+        this.activePath = activePath
       }
     }
   }
