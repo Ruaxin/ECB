@@ -8,12 +8,14 @@ html, body, #app {
   padding: 0;
 }
 
+// 更改下拉箭头样式
 .el-submenu__title {
   > i {
     color: #333c4f !important;
   }
 }
 
+// 更改面包屑箭头样式
 .el-breadcrumb__separator {
   color: #333c4f !important;
 }
@@ -23,6 +25,7 @@ html, body, #app {
   font-size: 12px;
 }
 
+// 更改卡片样式
 .el-card {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15) !important;
 }
@@ -35,3 +38,18 @@ html, body, #app {
 .el-pagination {
   margin-top: 15px;
 }
+
+// 更改添加用户输入框的验证颜色
+.el-form-item.is-success .el-input__inner, .el-form-item.is-success .el-input__inner:focus, .el-form-item.is-success .el-textarea__inner, .el-form-item.is-success .el-textarea__inner:focus {
+  border-color: #67C23A
+}
+
+.el-form-item.is-success .el-input-group__append .el-input__inner, .el-form-item.is-success .el-input-group__prepend .el-input__inner {
+  border-color: transparent
+}
+
+.el-form-item.is-success .el-input__validateIcon {
+  color: #67C23A
+}
+
+// 以上都是
