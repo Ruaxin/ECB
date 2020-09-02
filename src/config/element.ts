@@ -15,7 +15,9 @@ import {
   BreadcrumbItem,
   Card,
   Row,
-  Col
+  Col,
+  Table,
+  TableColumn
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import Vue from 'vue';
@@ -36,4 +38,6 @@ Vue.use(BreadcrumbItem);
 Vue.use(Card);
 Vue.use(Row);
 Vue.use(Col);
+Vue.use(Table);
+Vue.use(TableColumn);
 Vue.prototype.$message = Message;
