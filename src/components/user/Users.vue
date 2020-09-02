@@ -26,12 +26,52 @@
         <el-table-column prop="mobile" label="电话"></el-table-column>
         <el-table-column prop="role_name" label="权限"></el-table-column>
         <el-table-column label="状态">
-          <template slot-scope="scope">
-            <el-switch v-model="scope.row.mg_state" active-color="#13ce66">
+          <template v-slot="scope">
+            <el-switch
+              v-model="scope.row.mg_state"
+              active-color="#13ce66"
+              disabled>
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作"></el-table-column>
+        <el-table-column label="操作" width="180">
+          <!--<template v-slot="scope">-->
+          <template>
+            <el-tooltip
+              effect="dark"
+              content="编辑"
+              placement="top"
+              :enterable="false">
+              <el-button
+                icon="el-icon-edit"
+                size="mini"
+                type="primary">
+              </el-button>
+            </el-tooltip>
+            <el-tooltip
+              effect="dark"
+              content="删除"
+              placement="top"
+              :enterable="false">
+              <el-button
+                icon="el-icon-delete"
+                size="mini"
+                type="danger">
+              </el-button>
+            </el-tooltip>
+            <el-tooltip
+              effect="dark"
+              content="分配权限"
+              placement="top"
+              :enterable="false">
+              <el-button
+                icon="el-icon-setting"
+                size="mini"
+                type="warning">
+              </el-button>
+            </el-tooltip>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
   </div>
