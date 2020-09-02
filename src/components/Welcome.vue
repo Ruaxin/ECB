@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>Welcome</h3>
+    <h2>Welcome</h2>
     <img src="../assets/MrQuin.jpg" alt="MrQuin" width="180">
   </div>
 </template>
@@ -11,7 +11,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   div {
     display: flex;
     flex-direction: column;
