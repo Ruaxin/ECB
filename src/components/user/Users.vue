@@ -11,8 +11,17 @@
       <!--搜索区-->
       <el-row :gutter="65">
         <el-col :span="20">
-          <el-input placeholder="请输入内容" class="input-with-select">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input
+            placeholder="请输入内容"
+            v-model="queryInfo.query"
+            clearable
+            @clear="getUserList"
+            class="input-with-select">
+            <el-button
+              slot="append"
+              @click="getUserList"
+              icon="el-icon-search">
+            </el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
@@ -98,7 +107,7 @@
           // 当前的页数
           pagenum: 1,
           // 当前每页显示多少条数据
-          pagesize: 1
+          pagesize: 2
         },
         userList: [],
         total: 0
