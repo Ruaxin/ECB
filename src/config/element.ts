@@ -19,7 +19,8 @@ import {
   Table,
   TableColumn,
   Switch,
-  Tooltip
+  Tooltip,
+  Pagination
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import Vue from 'vue';
@@ -44,4 +45,5 @@ Vue.use(Table);
 Vue.use(TableColumn);
 Vue.use(Switch);
 Vue.use(Tooltip);
+Vue.use(Pagination);
 Vue.prototype.$message = Message;

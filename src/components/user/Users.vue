@@ -8,6 +8,7 @@
     </el-breadcrumb>
     <!--卡片视图-->
     <el-card>
+      <!--搜索区-->
       <el-row :gutter="65">
         <el-col :span="20">
           <el-input placeholder="请输入内容" class="input-with-select">
@@ -73,6 +74,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <!--分页区-->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.pagenum"
+        :page-sizes="[1, 2, 5, 10]"
+        :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
     </el-card>
   </div>
 </template>
@@ -84,8 +95,10 @@
       return {
         queryInfo: {
           query: '',
+          // 当前的页数
           pagenum: 1,
-          pagesize: 2
+          // 当前每页显示多少条数据
+          pagesize: 1
         },
         userList: [],
         total: 0
@@ -101,6 +114,14 @@
           this.userList = res.data.users
           this.total = res.data.total
         }
+      },
+      handleSizeChange (newSize) {
+        this.queryInfo.pagesize = newSize
+        this.getUserList()
+      },
+      handleCurrentChange (newPage) {
+        this.queryInfo.pagenum = newPage
+        this.getUserList()
       }
     }
   }
