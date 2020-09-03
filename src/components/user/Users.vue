@@ -128,7 +128,21 @@
       title="修改用户"
       :visible.sync="editDialogVisible"
       width="50%">
-      <span>这是一段信息</span>
+      <el-form
+        :model="editForm"
+        :rules="editFormRules"
+        ref="editFormRef"
+        label-width="70px">
+        <el-form-item label="用户名">
+          <el-input v-model="editForm.username" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="editForm.email" prop="email"></el-input>
+        </el-form-item>
+        <el-form-item label="手机">
+          <el-input v-model="editForm.mobile" prop="mobile"></el-input>
+        </el-form-item>
+      </el-form>
       <span slot="footer" class="dialog-footer">
     <el-button @click="editDialogVisible = false">取 消</el-button>
     <el-button type="primary" @click="editDialogVisible = false">确 定</el-button>
@@ -226,7 +240,31 @@
           ]
         },
         editDialogVisible: false,
-        editForm: {}
+        editForm: {},
+        editFormRules: {
+          email: [
+            {
+              required: true,
+              message: '请输入邮箱',
+              trigger: 'blur'
+            },
+            {
+              validator: checkEmail,
+              trigger: 'blur'
+            }
+          ],
+          mobile: [
+            {
+              required: true,
+              message: '请输入手机号',
+              trigger: 'blur'
+            },
+            {
+              validator: checkMobile,
+              trigger: 'blur'
+            }
+          ]
+        }
       }
     },
     created () {
