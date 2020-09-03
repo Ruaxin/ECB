@@ -251,9 +251,19 @@
         this.$refs.addFormRef.resetFields()
       },
       addUser () {
-        this.$refs.addFormRef.validate(valid => {
+        this.$refs.addFormRef.validate(async (valid) => {
           if (valid) {
-            // 发起请求
+            const { data: res } = await this.$http.post('users', this.addForm)
+            console.log(res)
+            if (res.meta.status === 201) {
+              this.$message.success('添加用户成功')
+              // 隐藏对话框
+              this.addDialogVisible = false
+              // 刷新列表
+              this.getUserList()
+            } else {
+              this.$message.error('添加用户失败')
+            }
           }
         })
       }
