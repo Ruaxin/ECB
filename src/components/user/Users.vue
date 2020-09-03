@@ -98,6 +98,7 @@
     <el-dialog
       title="添加用户"
       :visible.sync="addDialogVisible"
+      @close="addDialogClosed"
       width="50%">
       <el-form
         :model="addForm"
@@ -243,6 +244,10 @@
       handleCurrentChange (newPage) {
         this.queryInfo.pagenum = newPage
         this.getUserList()
+      },
+      // 添加用户重置
+      addDialogClosed () {
+        this.$refs.addFormRef.resetFields()
       }
     }
   }
