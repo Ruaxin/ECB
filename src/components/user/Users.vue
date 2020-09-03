@@ -120,7 +120,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
     <el-button @click="addDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="addDialogVisible = false">确 定</el-button>
+    <el-button type="primary" @click="addUser">确 定</el-button>
   </span>
     </el-dialog>
   </div>
@@ -147,6 +147,7 @@
         callback(new Error('请输入合法的手机号'))
       }
       return {
+        // get请求参数
         queryInfo: {
           query: '',
           // 当前的页数
@@ -229,8 +230,8 @@
         }
       },
       // switch开关监听
-      async userStateChange (userinfo) {
-        const { data: res } = await this.$http.put(`users/${userinfo.id}/state/${userinfo.mg_state}`)
+      async userStateChange (userInfo) {
+        const { data: res } = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
         if (res.meta.status === 200) {
           this.$message.success('更新用户状态成功')
         } else {
@@ -248,6 +249,13 @@
       // 添加用户重置
       addDialogClosed () {
         this.$refs.addFormRef.resetFields()
+      },
+      addUser () {
+        this.$refs.addFormRef.validate(valid => {
+          if (valid) {
+            // 发起请求
+          }
+        })
       }
     }
   }
