@@ -45,8 +45,7 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="180">
-          <!--<template v-slot="scope">-->
-          <template>
+          <template v-slot="scope">
             <el-tooltip
               effect="dark"
               content="编辑"
@@ -55,6 +54,7 @@
               <el-button
                 icon="el-icon-edit"
                 size="mini"
+                @click="showEditDialog(scope.row.id)"
                 type="primary">
               </el-button>
             </el-tooltip>
@@ -121,6 +121,17 @@
       <span slot="footer" class="dialog-footer">
     <el-button @click="addDialogVisible = false">取 消</el-button>
     <el-button type="primary" @click="addUser">确 定</el-button>
+  </span>
+    </el-dialog>
+    <!--修改用户对话框-->
+    <el-dialog
+      title="修改用户"
+      :visible.sync="editDialogVisible"
+      width="50%">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="editDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="editDialogVisible = false">确 定</el-button>
   </span>
     </el-dialog>
   </div>
@@ -213,7 +224,9 @@
               trigger: 'blur'
             }
           ]
-        }
+        },
+        editDialogVisible: false,
+        editForm: {}
       }
     },
     created () {
@@ -266,6 +279,15 @@
             }
           }
         })
+      },
+      async showEditDialog (id) {
+        const { data: res } = await this.$http.get(`users/${id}`)
+        if (res.meta.status === 200) {
+          this.editForm = res.data
+          this.editDialogVisible = true
+        } else {
+          this.$message.error('查询用户信息失败')
+        }
       }
     }
   }
