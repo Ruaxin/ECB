@@ -127,6 +127,7 @@
     <el-dialog
       title="修改用户"
       :visible.sync="editDialogVisible"
+      @close="editDialogClosed"
       width="50%">
       <el-form
         :model="editForm"
@@ -145,7 +146,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
     <el-button @click="editDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="editDialogVisible = false">确 定</el-button>
+    <el-button type="primary" @click="editUserInfo()">确 定</el-button>
   </span>
     </el-dialog>
   </div>
@@ -318,6 +319,7 @@
           }
         })
       },
+      // 查询用户
       async showEditDialog (id) {
         const { data: res } = await this.$http.get(`users/${id}`)
         if (res.meta.status === 200) {
@@ -326,6 +328,23 @@
         } else {
           this.$message.error('查询用户信息失败')
         }
+      },
+      editDialogClosed () {
+        this.$refs.editFormRef.resetFields()
+      },
+      editUserInfo () {
+        this.$refs.editFormRef.validate(async (valid) => {
+          if (valid) {
+            const { data: res } = await this.$http.put(`users/${this.editForm.id}`, this.editForm)
+            if (res.meta.status === 200) {
+              this.$message.success('修改成功')
+              this.editDialogVisible = false
+              this.getUserList()
+            } else {
+              this.$message.error('修改失败')
+            }
+          }
+        })
       }
     }
   }
