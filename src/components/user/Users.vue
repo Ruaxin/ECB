@@ -34,7 +34,7 @@
         <el-table-column prop="username" label="姓名"></el-table-column>
         <el-table-column prop="email" label="邮箱"></el-table-column>
         <el-table-column prop="mobile" label="电话"></el-table-column>
-        <el-table-column prop="role_name" label="权限"></el-table-column>
+        <el-table-column prop="role_name" label="角色"></el-table-column>
         <el-table-column label="状态">
           <template v-slot="scope">
             <el-switch
