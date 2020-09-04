@@ -87,10 +87,8 @@
               window.sessionStorage.setItem('token', res.data.token)
               //跳转到个人中心
               await this.$router.push('/home')
-              console.log(res)
             } else {
               this.$message.error('登录失败！')
-              console.log(res)
             }
           }
         })
