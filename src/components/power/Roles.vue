@@ -15,7 +15,19 @@
         </el-col>
       </el-row>
       <!--      角色列表-->
-
+      <el-table :data="roleList" border stripe>
+        <el-table-column type="expand"></el-table-column>
+        <el-table-column type="index" label="#"></el-table-column>
+        <el-table-column prop="roleName" label="角色名称"></el-table-column>
+        <el-table-column prop="roleDesc" label="角色描述"></el-table-column>
+        <el-table-column label="操作" width="300px">
+          <template>
+            <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+            <el-button type="warning" icon="el-icon-setting" size="mini">分配权限</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-card>
   </div>
 </template>
@@ -34,8 +46,9 @@
     methods: {
       async getRolesList () {
         const { data: res } = await this.$http.get('roles')
-        if (res.mate.status === 200) {
+        if (res.meta.status === 200) {
           this.roleList = res.data
+          console.log(res)
         } else {
           this.$message.error('获取角色列表失败')
         }
