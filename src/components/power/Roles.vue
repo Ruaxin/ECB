@@ -43,7 +43,7 @@
         <el-form-item label="角色名称" prop="roleName">
           <el-input v-model="addForm.roleName"></el-input>
         </el-form-item>
-        <el-form-item label="角色描述" prop="oleDesc">
+        <el-form-item label="角色描述" prop="roleDesc">
           <el-input v-model="addForm.roleDesc"></el-input>
         </el-form-item>
       </el-form>
