@@ -18,10 +18,11 @@
       <el-table :data="roleList" border stripe>
         <el-table-column type="expand">
           <template v-slot="scope">
-            <el-row v-for="(item1) in scope.row.children" :key="item1.id">
+            <el-row :class="['bdbottom',i1 === 0?'bdtop':'']" v-for="(item1,i1) in scope.row.children" :key="item1.id">
               <!--              渲染一级权限-->
               <el-col :span="5">
-                <el-tag type="success">{{item1.authName}}</el-tag>
+                <el-tag>{{item1.authName}}</el-tag>
+                <i class="el-icon-caret-right"></i>
               </el-col>
               <!--              渲染二级和三级权限-->
               <el-col :span="19"></el-col>
@@ -244,5 +245,15 @@
 </script>
 
 <style lang="scss" scoped>
+  .el-tag {
+    margin: 7px;
+  }
 
+  .bdtop {
+    border-top: 1px solid #eee;
+  }
+
+  .bdbottom {
+    border-bottom: 1px solid #eee;
+  }
 </style>
