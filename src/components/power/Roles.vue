@@ -28,7 +28,12 @@
               @click="showEditDialog(scope.row.id)"
               size="mini">编辑
             </el-button>
-            <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              @click="removeRolesById(scope.row.id)"
+              size="mini">删除
+            </el-button>
             <el-button type="warning" icon="el-icon-setting" size="mini">分配权限</el-button>
           </template>
         </el-table-column>
@@ -204,6 +209,25 @@
           }
         })
       },
+      // 删除
+      async removeRolesById (id) {
+        const confirmResult = await this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(error => error)
+        if (confirmResult === 'confirm') {
+          const { data: res } = await this.$http.delete(`roles/${id}`)
+          if (res.meta.status === 200) {
+            this.$message.success('删除角色成功')
+            this.getRolesList()
+          } else {
+            this.$message.error('删除角色失败')
+          }
+        } else {
+          this.$message.info('已取消删除')
+        }
+      }
     }
   }
 </script>
