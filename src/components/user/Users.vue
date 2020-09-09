@@ -322,7 +322,7 @@
           }
         })
       },
-      // 查询用户
+      // 编辑用户
       async showEditDialog (id) {
         const { data: res } = await this.$http.get(`users/${id}`)
         if (res.meta.status === 200) {
