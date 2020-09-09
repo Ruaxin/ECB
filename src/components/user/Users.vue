@@ -120,9 +120,9 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="addDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="addUser">确 定</el-button>
-  </span>
+        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addUser">确 定</el-button>
+      </span>
     </el-dialog>
     <!--修改用户对话框-->
     <el-dialog
@@ -146,9 +146,9 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="editDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="editUserInfo">确 定</el-button>
-  </span>
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editUserInfo">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -185,6 +185,7 @@
         },
         userList: [],
         total: 0,
+        // 添加
         addDialogVisible: false,
         addForm: {
           username: '',
@@ -242,6 +243,7 @@
             }
           ]
         },
+        // 编辑
         editDialogVisible: false,
         editForm: {},
         editFormRules: {
@@ -308,7 +310,6 @@
         this.$refs.addFormRef.validate(async (valid) => {
           if (valid) {
             const { data: res } = await this.$http.post('users', this.addForm)
-            console.log(res)
             if (res.meta.status === 201) {
               this.$message.success('添加用户成功')
               // 隐藏对话框
