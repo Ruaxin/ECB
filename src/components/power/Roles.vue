@@ -18,7 +18,7 @@
       <el-table :data="roleList" border stripe>
         <el-table-column type="expand">
           <template v-slot="scope">
-            <el-row :class="['bdbottom',i1 === 0 ? 'bdtop' : '']"
+            <el-row :class="['bdbottom',i1 === 0 ? 'bdtop' : '','vcenter']"
                     v-for="(item1,i1) in scope.row.children"
                     :key="item1.id">
               <!--              渲染一级权限-->
@@ -28,7 +28,7 @@
               </el-col>
               <!--              渲染二级和三级权限-->
               <el-col :span="19">
-                <el-row :class="[i2 === 0 ? '' : 'bdtop']"
+                <el-row :class="[i2 === 0 ? '' : 'bdtop','vcenter']"
                         v-for="(item2,i2) in item1.children"
                         :key="item2.id">
                   <el-col :span="6">
@@ -273,5 +273,10 @@
 
   .bdbottom {
     border-bottom: 1px solid #eee;
+  }
+
+  .vcenter {
+    display: flex;
+    align-items: center;
   }
 </style>
