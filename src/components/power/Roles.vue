@@ -16,7 +16,18 @@
       </el-row>
       <!--      角色列表-->
       <el-table :data="roleList" border stripe>
-        <el-table-column type="expand"></el-table-column>
+        <el-table-column type="expand">
+          <template v-slot="scope">
+            <el-row v-for="(item1) in scope.row.children" :key="item1.id">
+              <!--              渲染一级权限-->
+              <el-col :span="5">
+                <el-tag type="success">{{item1.authName}}</el-tag>
+              </el-col>
+              <!--              渲染二级和三级权限-->
+              <el-col :span="19"></el-col>
+            </el-row>
+          </template>
+        </el-table-column>
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column prop="roleName" label="角色名称"></el-table-column>
         <el-table-column prop="roleDesc" label="角色描述"></el-table-column>
