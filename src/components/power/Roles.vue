@@ -70,7 +70,12 @@
               @click="removeRolesById(scope.row.id)"
               size="mini">删除
             </el-button>
-            <el-button type="warning" icon="el-icon-setting" size="mini">分配权限</el-button>
+            <el-button
+              type="warning"
+              icon="el-icon-setting"
+              @click="showSetRightDialog"
+              size="mini">分配权限
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -123,6 +128,17 @@
         <el-button @click="editDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="editRolesInfo">确 定</el-button>
       </span>
+    </el-dialog>
+    <!--    分配权限-->
+    <el-dialog
+      title="分配权限"
+      :visible.sync="setRightDialogVisible"
+      width="50%">
+      <el-tree :data="rightsList" :props="treeProps"></el-tree>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="setRightDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="setRightDialogVisible = false">确 定</el-button>
+  </span>
     </el-dialog>
   </div>
 </template>
@@ -184,6 +200,12 @@
             }
           ]
         },
+        setRightDialogVisible: false,
+        rightsList: [],
+        treeProps: {
+          label: 'authName',
+          children: 'children'
+        }
       }
     },
     created () {
@@ -280,6 +302,16 @@
           role.children = res.data
         } else {
           this.$message.error('删除权限失败')
+        }
+      },
+      // 分配权限
+      async showSetRightDialog () {
+        const { data: res } = await this.$http.get('rights/tree')
+        this.setRightDialogVisible = true
+        if (res.meta.status === 200) {
+          this.rightsList = res.data
+        } else {
+          return this.$message.error('获取权限数据失败！')
         }
       }
     }
