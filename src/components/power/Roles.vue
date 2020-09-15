@@ -73,7 +73,7 @@
             <el-button
               type="warning"
               icon="el-icon-setting"
-              @click="showSetRightDialog"
+              @click="showSetRightDialog(scope.row)"
               size="mini">分配权限
             </el-button>
           </template>
@@ -133,12 +133,14 @@
     <el-dialog
       title="分配权限"
       :visible.sync="setRightDialogVisible"
+      @close="setRightDialogClosed"
       width="50%">
       <el-tree
         :data="rightsList"
         :props="treeProps"
         node-key="id"
         default-expand-all
+        :default-checked-keys="defKeys"
         show-checkbox></el-tree>
       <span slot="footer" class="dialog-footer">
     <el-button @click="setRightDialogVisible = false">取 消</el-button>
@@ -210,7 +212,8 @@
         treeProps: {
           label: 'authName',
           children: 'children'
-        }
+        },
+        defKeys: [],
       }
     },
     created () {
@@ -310,14 +313,29 @@
         }
       },
       // 分配权限
-      async showSetRightDialog () {
+      async showSetRightDialog (role) {
         const { data: res } = await this.$http.get('rights/tree')
-        this.setRightDialogVisible = true
         if (res.meta.status === 200) {
           this.rightsList = res.data
         } else {
           return this.$message.error('获取权限数据失败！')
         }
+        // 获取id
+        this.getLeafKeys(role, this.defKeys)
+        this.setRightDialogVisible = true
+      },
+      // 通过递归的形式获取三级权限的id
+      getLeafKeys (node, arr) {
+        if (!node.children) {
+          return arr.push(node.id)
+        }
+        node.children.forEach(item => {
+          this.getLeafKeys(item, arr)
+        })
+      },
+      // 清空之前的权限
+      setRightDialogClosed () {
+        this.defKeys = []
       }
     }
   }
