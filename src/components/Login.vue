@@ -38,8 +38,8 @@
     data () {
       return {
         loginForm: {
-          username: 'admin',
-          password: '123456'
+          username: '大海王八',
+          password: '654321'
         },
         // 验证合法
         loginFormRules: {
