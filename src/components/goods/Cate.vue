@@ -21,7 +21,30 @@
           index-text="#"
           border
           :show-row-hover="false"
-          :columns="columns"></tree-table>
+          :columns="columns">
+          <!--          是否有效-->
+          <template v-slot:isok="scope">
+            <i
+              class="el-icon-success"
+              style="color: #76bacc"
+              v-if="scope.row.cat_deleted === false"></i>
+            <i
+              class="el-icon-error"
+              style="color: #76bacc"
+              v-else></i>
+          </template>
+          <!--          排序-->
+          <template v-slot:order="scope">
+            <el-tag v-if="scope.row.cat_level === 0">一级</el-tag>
+            <el-tag type="success" v-else-if="scope.row.cat_level === 1">二级</el-tag>
+            <el-tag type="warning" v-else>三级</el-tag>
+          </template>
+          <!--          操作-->
+          <template v-slot:opt>
+            <el-button size="mini" type="primary" icon="el-icon-edit">编辑</el-button>
+            <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
+          </template>
+        </tree-table>
         <!--        分页区域-->
       </el-row>
     </el-card>
@@ -46,6 +69,23 @@
           {
             label: '分类名称',
             prop: 'cat_name'
+          },
+          {
+            label: '是否有效',
+            // 表示将当前列定义为模板
+            type: 'template',
+            // 当前模板的名称
+            template: 'isok'
+          },
+          {
+            label: '排序',
+            type: 'template',
+            template: 'order'
+          },
+          {
+            label: '操作',
+            type: 'template',
+            template: 'opt'
           }
         ]
       }
