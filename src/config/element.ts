@@ -27,7 +27,8 @@ import {
   Tree,
   Select,
   Option,
-  Cascader
+  Cascader,
+  Alert
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import Vue from 'vue';
@@ -60,5 +61,6 @@ Vue.use(Select);
 Vue.use(Option);
 Vue.use(Cascader);
 Vue.use(Cascader);
+Vue.use(Alert);
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;
