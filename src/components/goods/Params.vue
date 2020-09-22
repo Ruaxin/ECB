@@ -27,7 +27,12 @@
       </el-row>
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="动态参数" name="many">
-          <el-button type="primary" size="mini" :disabled="isBtnDisabled">添加参数</el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            @click="addDialogVisible=true"
+            :disabled="isBtnDisabled">添加参数
+          </el-button>
           <el-table
             :data="manyTableData"
             stripe
@@ -44,7 +49,12 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="静态属性" name="only">
-          <el-button type="primary" size="mini" :disabled="isBtnDisabled">添加属性</el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            @click="addDialogVisible=true"
+            :disabled="isBtnDisabled">添加属性
+          </el-button>
           <el-table
             :data="onlyTableData"
             stripe
@@ -62,6 +72,26 @@
         </el-tab-pane>
       </el-tabs>
     </el-card>
+    <!--    添加参数对话框-->
+    <el-dialog
+      :title="'添加'+titleText"
+      :visible.sync="addDialogVisible"
+      @close="addDialogClosed"
+      width="50%">
+      <el-form
+        ref="addFormRef"
+        :model="addForm"
+        :rules="addFormRules"
+        label-width="100px">
+        <el-form-item prop="attr_name" :label="titleText">
+          <el-input v-model="addForm.attr_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="addDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="addParams">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -81,6 +111,15 @@
         activeName: 'many',
         manyTableData: [],
         onlyTableData: [],
+        addDialogVisible: false,
+        addForm: { attr_name: '' },
+        addFormRules: {
+          attr_name: {
+            required: true,
+            message: '请输入参数名称',
+            trigger: 'blur'
+          },
+        },
       }
     },
     created () {
@@ -114,6 +153,26 @@
         } else {
           this.selectedCateKeys = []
         }
+      },
+      addDialogClosed () {
+        this.$refs.addFormRef.resetFields()
+      },
+      addParams () {
+        this.$refs.addFormRef.validate(async valid => {
+          if (valid) {
+            const { data: res } = await this.$http.post(`categories/${this.cateId}/attributes`, {
+              attr_name: this.addForm.attr_name,
+              attr_sel: this.activeName
+            })
+            if (res.meta.status === 201) {
+              this.$message.success('添加参数成功')
+            } else {
+              this.$message.error('添加参数失败')
+            }
+            this.addDialogVisible = false
+            this.getParamsData()
+          }
+        })
       }
     },
     computed: {
@@ -126,6 +185,9 @@
         } else {
           return null
         }
+      },
+      titleText () {
+        return this.activeName === 'many' ? '动态参数' : '静态属性'
       }
     }
   }
