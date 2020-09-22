@@ -21,9 +21,46 @@
             v-model="selectedCateKeys"
             :options="cateList"
             :props="propsList"
+            class="parCascader"
             @change="handleChange"></el-cascader>
         </el-col>
       </el-row>
+      <el-tabs v-model="activeName" @tab-click="handleTabClick">
+        <el-tab-pane label="动态参数" name="many">
+          <el-button type="primary" size="mini" :disabled="isBtnDisabled">添加参数</el-button>
+          <el-table
+            :data="manyTableData"
+            stripe
+            border>
+            <el-table-column type="expand"></el-table-column>
+            <el-table-column type="index" label="#"></el-table-column>
+            <el-table-column prop="attr_name" label="参数名称"></el-table-column>
+            <el-table-column label="操作">
+              <template>
+                <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
+                <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="静态属性" name="only">
+          <el-button type="primary" size="mini" :disabled="isBtnDisabled">添加属性</el-button>
+          <el-table
+            :data="onlyTableData"
+            stripe
+            border>
+            <el-table-column type="expand"></el-table-column>
+            <el-table-column type="index" label="#"></el-table-column>
+            <el-table-column prop="attr_name" label="属性名称"></el-table-column>
+            <el-table-column label="操作">
+              <template>
+                <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
+                <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
     </el-card>
   </div>
 </template>
@@ -40,7 +77,10 @@
           label: 'cat_name',
           children: 'children'
         },
-        selectedCateKeys: []
+        selectedCateKeys: [],
+        activeName: 'many',
+        manyTableData: [],
+        onlyTableData: [],
       }
     },
     created () {
@@ -56,7 +96,36 @@
         }
       },
       handleChange () {
-        console.log(this.selectedCateKeys)
+        this.getParamsData()
+      },
+      handleTabClick () {
+        this.getParamsData()
+      },
+      async getParamsData () {
+        if (this.selectedCateKeys.length === 3) {
+          const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes`, { params: { sel: this.activeName } })
+          if (res.meta.status === 200) {
+            if (this.activeName === 'many') {
+              this.manyTableData = res.data
+            } else {
+              this.onlyTableData = res.data
+            }
+          }
+        } else {
+          this.selectedCateKeys = []
+        }
+      }
+    },
+    computed: {
+      isBtnDisabled () {
+        return this.selectedCateKeys.length !== 3
+      },
+      cateId () {
+        if (this.selectedCateKeys.length === 3) {
+          return this.selectedCateKeys[2]
+        } else {
+          return null
+        }
       }
     }
   }
@@ -65,5 +134,9 @@
 <style lang="scss" scoped>
   .cat_opt {
     margin: 15px 0;
+  }
+
+  .parCascader {
+    width: 300px;
   }
 </style>
