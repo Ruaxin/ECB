@@ -41,9 +41,19 @@
             <el-table-column type="index" label="#"></el-table-column>
             <el-table-column prop="attr_name" label="参数名称"></el-table-column>
             <el-table-column label="操作">
-              <template>
-                <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
-                <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+              <template v-slot="scope">
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  size="mini"
+                  @click="showEditDialog(scope.row.attr_id)">编辑
+                </el-button>
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  @click="removeParams(scope.row.attr_id)"
+                  size="mini">删除
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -63,9 +73,19 @@
             <el-table-column type="index" label="#"></el-table-column>
             <el-table-column prop="attr_name" label="属性名称"></el-table-column>
             <el-table-column label="操作">
-              <template>
-                <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
-                <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+              <template v-slot="scope">
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  size="mini"
+                  @click="showEditDialog(scope.row.attr_id)">编辑
+                </el-button>
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  @click="removeParams(scope.row.attr_id)"
+                  size="mini">删除
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -88,9 +108,28 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="addDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="addParams">确 定</el-button>
-  </span>
+        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addParams">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      :title="'修改'+titleText"
+      :visible.sync="editDialogVisible"
+      @close="editDialogClosed"
+      width="50%">
+      <el-form
+        ref="editFormRef"
+        :model="editForm"
+        :rules="editFormRules"
+        label-width="100px">
+        <el-form-item prop="attr_name" :label="titleText">
+          <el-input v-model="editForm.attr_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editParams">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -112,8 +151,19 @@
         manyTableData: [],
         onlyTableData: [],
         addDialogVisible: false,
-        addForm: { attr_name: '' },
+        addForm: {
+          attr_name: ''
+        },
         addFormRules: {
+          attr_name: {
+            required: true,
+            message: '请输入参数名称',
+            trigger: 'blur'
+          },
+        },
+        editDialogVisible: false,
+        editForm: {},
+        editFormRules: {
           attr_name: {
             required: true,
             message: '请输入参数名称',
@@ -173,6 +223,55 @@
             this.getParamsData()
           }
         })
+      },
+      async showEditDialog (attr_id) {
+        const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes/${attr_id}`, {
+          params: { attr_sel: this.activeName }
+        })
+        if (res.meta.status === 200) {
+          this.editForm = res.data
+        } else {
+          this.$message('数据获取失败')
+        }
+        this.editDialogVisible = true
+      },
+      editDialogClosed () {
+        this.$refs.editFormRef.resetFields()
+      },
+      editParams () {
+        this.$refs.editFormRef.validate(async valid => {
+          if (valid) {
+            const { data: res } = await this.$http.put(`categories/${this.cateId}/attributes/${this.editForm.attr_id}`, {
+              attr_name: this.editForm.attr_name,
+              attr_sel: this.activeName
+            })
+            if (res.meta.status === 200) {
+              this.$message.success('修改参数成功')
+            } else {
+              this.$message.error('修改参数失败')
+            }
+            this.editDialogVisible = false
+            this.getParamsData()
+          }
+        })
+      },
+      async removeParams (attr_id) {
+        const confirmResult = await this.$confirm('此操作将永久删除该参数, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(err => err)
+        if (confirmResult !== 'confirm') {
+          return this.$message.info('已取消删除')
+        }
+        const { data: res } = await this.$http.delete(`categories/${this.cateId}/attributes/${attr_id}`)
+        if (res.meta.status === 200) {
+          this.$message.success('删除成功')
+        } else {
+          this.$message.error('删除失败')
+        }
+        this.editDialogVisible = false
+        this.getParamsData()
       }
     },
     computed: {
