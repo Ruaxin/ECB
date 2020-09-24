@@ -201,7 +201,7 @@
           const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes`, { params: { sel: this.activeName } })
           if (res.meta.status === 200) {
             res.data.forEach(item => {
-              item.attr_vals = item.attr_vals.split(' ')
+              item.attr_vals = item.attr_vals ? item.attr_vals.split(' ') : []
             })
             if (this.activeName === 'many') {
               this.manyTableData = res.data
