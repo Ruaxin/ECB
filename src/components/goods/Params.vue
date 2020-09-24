@@ -37,7 +37,13 @@
             :data="manyTableData"
             stripe
             border>
-            <el-table-column type="expand"></el-table-column>
+            <el-table-column type="expand">
+              <template v-slot="scope">
+                <el-tag v-for="(item, i) in scope.row.attr_vals" :key="i" closable>
+                  {{item}}
+                </el-tag>
+              </template>
+            </el-table-column>
             <el-table-column type="index" label="#"></el-table-column>
             <el-table-column prop="attr_name" label="参数名称"></el-table-column>
             <el-table-column label="操作">
@@ -194,6 +200,9 @@
         if (this.selectedCateKeys.length === 3) {
           const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes`, { params: { sel: this.activeName } })
           if (res.meta.status === 200) {
+            res.data.forEach(item => {
+              item.attr_vals = item.attr_vals.split(' ')
+            })
             if (this.activeName === 'many') {
               this.manyTableData = res.data
             } else {
@@ -299,5 +308,9 @@
 
   .parCascader {
     width: 300px;
+  }
+
+  .el-tag {
+    margin: 5px;
   }
 </style>
