@@ -42,6 +42,22 @@
                 <el-tag v-for="(item, i) in scope.row.attr_vals" :key="i" closable>
                   {{item}}
                 </el-tag>
+                <el-input
+                  class="input-new-tag"
+                  v-if="scope.row.inputVisible"
+                  v-model="scope.row.inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm(scope.row)"
+                  @blur="handleInputConfirm(scope.row)"
+                >
+                </el-input>
+                <el-button v-else
+                           class="button-new-tag"
+                           size="small"
+                           @click="showInput(scope.row)">
+                  + New Tag
+                </el-button>
               </template>
             </el-table-column>
             <el-table-column type="index" label="#"></el-table-column>
@@ -202,6 +218,8 @@
           if (res.meta.status === 200) {
             res.data.forEach(item => {
               item.attr_vals = item.attr_vals ? item.attr_vals.split(' ') : []
+              item.inputVisible = false
+              item.inputValue = ''
             })
             if (this.activeName === 'many') {
               this.manyTableData = res.data
@@ -281,6 +299,32 @@
         }
         this.editDialogVisible = false
         this.getParamsData()
+      },
+      async handleInputConfirm (row) {
+        if (row.inputValue.trim().length === 0) {
+          row.inputVisible = ''
+          row.inputVisible = false
+          return
+        }
+        row.attr_vals.push(row.inputValue.trim())
+        row.inputVisible = false
+        row.inputValue = ''
+        const { data: res } = await this.$http.put(`categories/${this.cateId}/attributes/${row.attr_id}`, {
+          attr_name: row.attr_name,
+          attr_sel: row.attr_sel,
+          attr_vals: row.attr_vals.join(' ')
+        })
+        if (res.meta.status === 200) {
+          this.$message.success('添加成功')
+        } else {
+          this.$message.error('添加失败')
+        }
+      },
+      showInput (row) {
+        row.inputVisible = true
+        this.$nextTick(_ => {
+          this.$refs.saveTagInput.$refs.input.focus()
+        })
       }
     },
     computed: {
@@ -312,5 +356,9 @@
 
   .el-tag {
     margin: 5px;
+  }
+
+  .input-new-tag {
+    width: 120px;
   }
 </style>
