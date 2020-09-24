@@ -217,6 +217,11 @@
         this.getParamsData()
       },
       async getParamsData () {
+        if (this.selectedCateKeys.length !== 3) {
+          this.selectedCateKeys = []
+          this.manyTableData = []
+          this.onlyTableData = []
+        }
         if (this.selectedCateKeys.length === 3) {
           const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes`, { params: { sel: this.activeName } })
           if (res.meta.status === 200) {
