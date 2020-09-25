@@ -25,29 +25,25 @@
 </template>
 
 <script>
-  export default {
-    name: 'Rights',
-    data () {
-      return {
-        rightsList: []
-      }
-    },
-    created () {
-      this.getRightsList()
-    },
-    methods: {
-      async getRightsList () {
-        const { data: res } = await this.$http.get('rights/list')
-        if (res.meta.status === 200) {
-          this.rightsList = res.data
-        } else {
-          this.$message.error('获取权限列表失败')
-        }
+export default {
+  name: 'Rights',
+  data () {
+    return {
+      rightsList: []
+    }
+  },
+  created () {
+    this.getRightsList()
+  },
+  methods: {
+    async getRightsList () {
+      const { data: res } = await this.$http.get('rights/list')
+      if (res.meta.status === 200) {
+        this.rightsList = res.data
+      } else {
+        this.$message.error('获取权限列表失败')
       }
     }
   }
+}
 </script>
-
-<style scoped>
-
-</style>

@@ -33,117 +33,117 @@
 </template>
 
 <script>
-  export default {
-    name: 'Login',
-    data () {
-      return {
-        loginForm: {
-          username: 'admin',
-          password: '123456'
-        },
-        // 验证合法
-        loginFormRules: {
-          username: [
-            {
-              required: true,
-              message: '请输入登录名称',
-              trigger: 'blur'
-            },
-            {
-              min: 3,
-              max: 10,
-              message: '长度在 3 到 10 个字符',
-              trigger: 'blur'
-            }
-          ],
-          password: [
-            {
-              required: true,
-              message: '请输入登录密码',
-              trigger: 'blur'
-            },
-            {
-              min: 6,
-              max: 15,
-              message: '长度在 6 到 15 个字符',
-              trigger: 'blur'
-            }
-          ]
-        }
-      }
-    },
-    methods: {
-      resetLoginForm () {
-        // resetFields方法是ele提供的
-        this.$refs.loginFormRef.resetFields()
+export default {
+  name: 'Login',
+  data () {
+    return {
+      loginForm: {
+        username: 'admin',
+        password: '123456'
       },
-      login () {
-        this.$refs.loginFormRef.validate(async (valid) => {
-          if (valid) {
-            const { data: res } = await this.$http.post('login', this.loginForm)
-            if (res.meta.status === 200) {
-              this.$message.success('登录成功')
-              //存入token
-              window.sessionStorage.setItem('token', res.data.token)
-              //跳转到个人中心
-              await this.$router.push('/home')
-            } else {
-              this.$message.error('登录失败！')
-            }
+      // 验证合法
+      loginFormRules: {
+        username: [
+          {
+            required: true,
+            message: '请输入登录名称',
+            trigger: 'blur'
+          },
+          {
+            min: 3,
+            max: 10,
+            message: '长度在 3 到 10 个字符',
+            trigger: 'blur'
           }
-        })
+        ],
+        password: [
+          {
+            required: true,
+            message: '请输入登录密码',
+            trigger: 'blur'
+          },
+          {
+            min: 6,
+            max: 15,
+            message: '长度在 6 到 15 个字符',
+            trigger: 'blur'
+          }
+        ]
       }
     }
+  },
+  methods: {
+    resetLoginForm () {
+      // resetFields方法是ele提供的
+      this.$refs.loginFormRef.resetFields()
+    },
+    login () {
+      this.$refs.loginFormRef.validate(async (valid) => {
+        if (valid) {
+          const { data: res } = await this.$http.post('login', this.loginForm)
+          if (res.meta.status === 200) {
+            this.$message.success('登录成功')
+            //存入token
+            window.sessionStorage.setItem('token', res.data.token)
+            //跳转到个人中心
+            await this.$router.push('/home')
+          } else {
+            this.$message.error('登录失败！')
+          }
+        }
+      })
+    }
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  .login_container {
-    background-color: #76bacc;
-    height: 100%;
+.login_container {
+  background-color: #76bacc;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > .login_box {
+    width: 450px;
+    height: 300px;
+    background-color: #f7ce78;
+    border-radius: 3px;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
 
-    > .login_box {
-      width: 450px;
-      height: 300px;
-      background-color: #f7ce78;
-      border-radius: 3px;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
+    > .avatar_box {
+      height: 130px;
+      width: 130px;
+      border: 1px solid #eee;
+      border-radius: 50%;
+      padding: 6px;
+      transform: translateY(-50%);
+      background-color: #bbbbaa;
+      box-shadow: 0 0 10px #ddd;
 
-      > .avatar_box {
-        height: 130px;
-        width: 130px;
-        border: 1px solid #eee;
+      > img {
+        width: 100%;
+        height: 100%;
+        background-color: #e7e7d8;
         border-radius: 50%;
-        padding: 6px;
-        transform: translateY(-50%);
-        background-color: #bbbbaa;
-        box-shadow: 0 0 10px #ddd;
-
-        > img {
-          width: 100%;
-          height: 100%;
-          background-color: #e7e7d8;
-          border-radius: 50%;
-        }
       }
     }
   }
+}
 
-  .login_form {
-    width: 100%;
-    padding: 0 20px;
-    box-sizing: border-box;
-    margin-top: -36px;
-  }
+.login_form {
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+  margin-top: -36px;
+}
 
-  .btns {
-    display: flex;
-    justify-content: flex-end;
-  }
+.btns {
+  display: flex;
+  justify-content: flex-end;
+}
 </style>

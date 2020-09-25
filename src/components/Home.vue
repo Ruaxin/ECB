@@ -28,7 +28,7 @@
               :key="item.id">
               <template slot="title">
                 <i :class="iconsObj[item.id]"></i>
-                <span>{{item.authName}}</span>
+                <span>{{ item.authName }}</span>
               </template>
               <!--二级菜单-->
               <el-menu-item
@@ -38,7 +38,7 @@
                 :key="subItem.id">
                 <template slot="title">
                   <i class="el-icon-s-help"></i>
-                  <span>{{subItem.authName}}</span>
+                  <span>{{ subItem.authName }}</span>
                 </template>
               </el-menu-item>
             </el-submenu>
@@ -53,110 +53,109 @@
 </template>
 
 <script>
-  export default {
-    name: 'Home',
-    created () {
-      this.getMenuList()
-      this.activePath = window.sessionStorage.getItem('activePath')
+export default {
+  name: 'Home',
+  created () {
+    this.getMenuList()
+    this.activePath = window.sessionStorage.getItem('activePath')
+  },
+  data () {
+    return {
+      menuList: [],
+      iconsObj: {
+        '125': 'iconfont icon-user',
+        '103': 'iconfont icon-tijikongjian',
+        '101': 'iconfont icon-shangpin',
+        '102': 'iconfont icon-danju',
+        '145': 'iconfont icon-baobiao',
+      },
+      isCollapse: false,
+      activePath: ''
+    }
+  },
+  methods: {
+    // 登录
+    logout () {
+      window.sessionStorage.clear()
+      this.$router.push('/login')
     },
-    data () {
-      return {
-        menuList: [],
-        iconsObj: {
-          '125': 'iconfont icon-user',
-          '103': 'iconfont icon-tijikongjian',
-          '101': 'iconfont icon-shangpin',
-          '102': 'iconfont icon-danju',
-          '145': 'iconfont icon-baobiao',
-        },
-        isCollapse: false,
-        activePath: ''
+    // 获取侧边栏菜单
+    async getMenuList () {
+      const { data: res } = await this.$http.get('menus')
+      if (res.meta.status === 200) {
+        this.menuList = res.data
       }
     },
-    methods: {
-      // 登录
-      logout () {
-        window.sessionStorage.clear()
-        this.$router.push('/login')
-      },
-      // 获取侧边栏菜单
-      async getMenuList () {
-        const { data: res } = await this.$http.get('menus')
-        if (res.meta.status === 200) {
-          this.menuList = res.data
-        }
-      },
-      toggleCollapse () {
-        this.isCollapse = !this.isCollapse
-      },
-      saveNavState (activePath) {
-        window.sessionStorage.setItem('activePath', activePath)
-        this.activePath = activePath
-      }
+    toggleCollapse () {
+      this.isCollapse = !this.isCollapse
+    },
+    saveNavState (activePath) {
+      window.sessionStorage.setItem('activePath', activePath)
+      this.activePath = activePath
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  .home-container {
-    height: 100vh;
+.home-container {
+  height: 100vh;
 
-    > .el-header {
-      background-color: #f7ce78;
+  > .el-header {
+    background-color: #f7ce78;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 6px;
+    align-items: center;
+    color: #333c4f;
+    font-size: 20px;
+    font-weight: bold;
+
+    > div {
       display: flex;
-      justify-content: space-between;
-      padding-left: 6px;
       align-items: center;
-      color: #333c4f;
-      font-size: 20px;
-      font-weight: bold;
 
-      > div {
-        display: flex;
-        align-items: center;
+      > .ball {
+        width: 56px;
+        height: 56px;
+      }
 
-        > .ball {
-          width: 56px;
-          height: 56px;
-        }
-
-        > span {
-          margin-left: 12px;
-        }
+      > span {
+        margin-left: 12px;
       }
     }
   }
+}
 
-  .el-aside {
-    background-color: #de7f8b;
-    font-weight: 600;
+.el-aside {
+  background-color: #de7f8b;
+  font-weight: 600;
 
-    > .el-menu {
-      border-right: none;
-    }
-
+  > .el-menu {
+    border-right: none;
   }
+}
 
-  .el-main {
-    background-color: #76bacc;
-  }
+.el-main {
+  background-color: #76bacc;
+}
 
-  .iconfont {
-    margin-right: 6px;
-  }
+.iconfont {
+  margin-right: 6px;
+}
 
-  .el-icon-s-help {
-    color: #333c4f;
-  }
+.el-icon-s-help {
+  color: #333c4f;
+}
 
-  .toggle-button {
-    background-color: #cf5568;
-    font-size: 16px;
-    line-height: 36px;
-    color: #333c4f;
-    text-align: center;
-    letter-spacing: 0.6em;
-    cursor: pointer;
-    font-weight: bold;
-  }
+.toggle-button {
+  background-color: #cf5568;
+  font-size: 16px;
+  line-height: 36px;
+  color: #333c4f;
+  text-align: center;
+  letter-spacing: 0.6em;
+  cursor: pointer;
+  font-weight: bold;
+}
 </style>

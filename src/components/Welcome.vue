@@ -6,14 +6,14 @@
 </template>
 
 <script>
-  export default {
-    name: 'Welcome'
-  }
+export default {
+  name: 'Welcome'
+}
 </script>
 
 <style lang="scss" scoped>
-  div {
-    display: flex;
-    flex-direction: column;
-  }
+div {
+  display: flex;
+  flex-direction: column;
+}
 </style>

@@ -91,147 +91,147 @@
 </template>
 
 <script>
-  export default {
-    name: 'Cate',
-    data () {
-      return {
-        // 商品分类的数据列表
-        cateList: [],
-        querInfo: {
-          type: 3,
-          pagenum: 1,
-          pagesize: 5
+export default {
+  name: 'Cate',
+  data () {
+    return {
+      // 商品分类的数据列表
+      cateList: [],
+      querInfo: {
+        type: 3,
+        pagenum: 1,
+        pagesize: 5
+      },
+      // 总数据条数
+      total: 0,
+      // 自定义树形表单数据
+      columns: [
+        {
+          label: '分类名称',
+          prop: 'cat_name'
         },
-        // 总数据条数
-        total: 0,
-        // 自定义树形表单数据
-        columns: [
+        {
+          label: '是否有效',
+          // 表示将当前列定义为模板
+          type: 'template',
+          // 当前模板的名称
+          template: 'isok'
+        },
+        {
+          label: '排序',
+          type: 'template',
+          template: 'order'
+        },
+        {
+          label: '操作',
+          type: 'template',
+          template: 'opt'
+        }
+      ],
+      addCateDialogVisible: false,
+      // 添加分类的表单数据对象
+      addCateForm: {
+        cat_name: '',
+        cat_pid: 0,
+        cat_level: 0
+      },
+      addCateFormRules: {
+        cat_name: [
           {
-            label: '分类名称',
-            prop: 'cat_name'
-          },
-          {
-            label: '是否有效',
-            // 表示将当前列定义为模板
-            type: 'template',
-            // 当前模板的名称
-            template: 'isok'
-          },
-          {
-            label: '排序',
-            type: 'template',
-            template: 'order'
-          },
-          {
-            label: '操作',
-            type: 'template',
-            template: 'opt'
+            required: true,
+            message: '请输入分类名称',
+            trigger: 'blur'
           }
-        ],
-        addCateDialogVisible: false,
-        // 添加分类的表单数据对象
-        addCateForm: {
-          cat_name: '',
-          cat_pid: 0,
-          cat_level: 0
-        },
-        addCateFormRules: {
-          cat_name: [
-            {
-              required: true,
-              message: '请输入分类名称',
-              trigger: 'blur'
-            }
-          ]
-        },
-        parentCateList: [],
-        // 联级选择
-        cascaderProps: {
-          expandTrigger: 'hover',
-          value: 'cat_id',
-          label: 'cat_name',
-          children: 'children',
-          checkStrictly: true
-        },
-        selectedKeys: []
+        ]
+      },
+      parentCateList: [],
+      // 联级选择
+      cascaderProps: {
+        expandTrigger: 'hover',
+        value: 'cat_id',
+        label: 'cat_name',
+        children: 'children',
+        checkStrictly: true
+      },
+      selectedKeys: []
+    }
+  },
+  created () {
+    this.getCateList()
+  },
+  methods: {
+    // 获取商品分类数据
+    async getCateList () {
+      const { data: res } = await this.$http.get('categories', { params: this.querInfo })
+      if (res.meta.status === 200) {
+        this.cateList = res.data.result
+        this.total = res.data.total
+      } else {
+        this.$message.error('获取商品分类失败')
       }
     },
-    created () {
+    // 改变页面显示数
+    handleSizeChange (newSize) {
+      this.querInfo.pagesize = newSize
       this.getCateList()
     },
-    methods: {
-      // 获取商品分类数据
-      async getCateList () {
-        const { data: res } = await this.$http.get('categories', { params: this.querInfo })
-        if (res.meta.status === 200) {
-          this.cateList = res.data.result
-          this.total = res.data.total
-        } else {
-          this.$message.error('获取商品分类失败')
-        }
-      },
-      // 改变页面显示数
-      handleSizeChange (newSize) {
-        this.querInfo.pagesize = newSize
-        this.getCateList()
-      },
-      handleCurrentChange (newPage) {
-        this.querInfo.pagenum = newPage
-        this.getCateList()
-      },
-      showAddCateDialog () {
-        this.getParentCateList()
-        this.addCateDialogVisible = true
-      },
-      // 获取父级分类的数据列表
-      async getParentCateList () {
-        const { data: res } = await this.$http.get('categories', { params: { type: 2 } })
-        if (res.meta.status === 200) {
-          this.parentCateList = res.data
-        } else {
-          this.$message.error('获取父级分类数据列表失败')
-        }
-      },
-      parentCateChange () {
-        if (this.selectedKeys.length > 0) {
-          this.addCateForm.cat_pid = this.selectedKeys[this.selectedKeys.length - 1]
-          this.addCateForm.cat_level = this.selectedKeys.length
-        } else {
-          this.addCateForm.cat_pid = 0
-          this.addCateForm.cat_level = 0
-        }
-      },
-      addCate () {
-        this.$refs.addCateFormRef.validate(async valid => {
-          if (valid) {
-            const { data: res } = await this.$http.post('categories', this.addCateForm)
-            if (res.meta.status === 201) {
-              this.$message.success('商品分类创建成功')
-              this.getCateList()
-              this.addCateDialogVisible = false
-            } else {
-              this.$message.error('商品分类创建失败')
-              this.addCateDialogVisible = false
-            }
-          }
-        })
-      },
-      addCateDialogClose () {
-        this.$refs.addCateFormRef.resetFields()
+    handleCurrentChange (newPage) {
+      this.querInfo.pagenum = newPage
+      this.getCateList()
+    },
+    showAddCateDialog () {
+      this.getParentCateList()
+      this.addCateDialogVisible = true
+    },
+    // 获取父级分类的数据列表
+    async getParentCateList () {
+      const { data: res } = await this.$http.get('categories', { params: { type: 2 } })
+      if (res.meta.status === 200) {
+        this.parentCateList = res.data
+      } else {
+        this.$message.error('获取父级分类数据列表失败')
+      }
+    },
+    parentCateChange () {
+      if (this.selectedKeys.length > 0) {
+        this.addCateForm.cat_pid = this.selectedKeys[this.selectedKeys.length - 1]
+        this.addCateForm.cat_level = this.selectedKeys.length
+      } else {
         this.addCateForm.cat_pid = 0
         this.addCateForm.cat_level = 0
-        this.selectedKeys = []
       }
+    },
+    addCate () {
+      this.$refs.addCateFormRef.validate(async valid => {
+        if (valid) {
+          const { data: res } = await this.$http.post('categories', this.addCateForm)
+          if (res.meta.status === 201) {
+            this.$message.success('商品分类创建成功')
+            await this.getCateList()
+            this.addCateDialogVisible = false
+          } else {
+            this.$message.error('商品分类创建失败')
+            this.addCateDialogVisible = false
+          }
+        }
+      })
+    },
+    addCateDialogClose () {
+      this.$refs.addCateFormRef.resetFields()
+      this.addCateForm.cat_pid = 0
+      this.addCateForm.cat_level = 0
+      this.selectedKeys = []
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  .treeTable {
-    margin-top: 15px;
-  }
+.treeTable {
+  margin-top: 15px;
+}
 
-  .el-cascader {
-    width: 100%;
-  }
+.el-cascader {
+  width: 100%;
+}
 </style>
