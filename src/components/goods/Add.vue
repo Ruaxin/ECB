@@ -26,16 +26,35 @@
         <el-step title="商品内容"></el-step>
         <el-step title="完成"></el-step>
       </el-steps>
-      <el-tabs
-        tab-position="left"
-        v-model="activeIndex"
-        style="height: 200px;">
-        <el-tab-pane label="基本信息" name="0">用户管理</el-tab-pane>
-        <el-tab-pane label="商品参数" name="1">配置管理</el-tab-pane>
-        <el-tab-pane label="商品属性" name="2">角色管理</el-tab-pane>
-        <el-tab-pane label="商品图片" name="3">定时任务补偿</el-tab-pane>
-        <el-tab-pane label="商品内容" name="4">定时任务补偿</el-tab-pane>
-      </el-tabs>
+      <el-form
+        ref="addFormRef"
+        :model="addForm"
+        :rules="addFormRules"
+        label-position="top"
+        label-width="100px">
+        <el-tabs
+          tab-position="left"
+          v-model="activeIndex">
+          <el-tab-pane label="基本信息" name="0">
+            <el-form-item label="商品名称" prop="goods_name">
+              <el-input v-model="addForm.goods_name"/>
+            </el-form-item>
+            <el-form-item label="商品价格" prop="goods_price">
+              <el-input v-model="addForm.goods_price" type="number"/>
+            </el-form-item>
+            <el-form-item label="商品重量" prop="goods_weight">
+              <el-input v-model="addForm.goods_weight" type="number"/>
+            </el-form-item>
+            <el-form-item label="商品数量" prop="goods_number">
+              <el-input v-model="addForm.goods_number" type="number"/>
+            </el-form-item>
+          </el-tab-pane>
+          <el-tab-pane label="商品参数" name="1">配置管理</el-tab-pane>
+          <el-tab-pane label="商品属性" name="2">角色管理</el-tab-pane>
+          <el-tab-pane label="商品图片" name="3">定时任务补偿</el-tab-pane>
+          <el-tab-pane label="商品内容" name="4">定时任务补偿</el-tab-pane>
+        </el-tabs>
+      </el-form>
     </el-card>
   </div>
 </template>
@@ -45,7 +64,43 @@ export default {
   name: 'Add',
   data () {
     return {
-      activeIndex: '0'
+      activeIndex: '0',
+      addForm: {
+        goods_name: '',
+        goods_price: 0,
+        goods_weight: 0,
+        goods_number: 0,
+      },
+      addFormRules: {
+        goods_name: [
+          {
+            required: true,
+            message: '请输入商品名称',
+            trigger: 'blur'
+          },
+        ],
+        goods_price: [
+          {
+            required: true,
+            message: '请输入商品价格',
+            trigger: 'blur'
+          }
+        ],
+        goods_weight: [
+          {
+            required: true,
+            message: '请输入商品重量',
+            trigger: 'blur'
+          }
+        ],
+        goods_number: [
+          {
+            required: true,
+            message: '请输入商品数量',
+            trigger: 'blur'
+          }
+        ]
+      },
     }
   },
   methods: {}
