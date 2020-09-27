@@ -10,9 +10,13 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-input
+            v-model="queryInfo.query"
+            clearable
+            @clear="getGoodsList"
             placeholder="请输入内容">
             <el-button
               slot="append"
+              @click="getGoodsList"
               icon="el-icon-search">
             </el-button>
           </el-input>
