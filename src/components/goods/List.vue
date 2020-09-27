@@ -22,7 +22,7 @@
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">添加用户</el-button>
+          <el-button type="primary" @click="goAddpage">添加商品</el-button>
         </el-col>
       </el-row>
       <el-table :data="goodsList" border stripe>
@@ -116,7 +116,9 @@ export default {
       } else {
         this.$message.error('删除失败')
       }
-
+    },
+    goAddpage(){
+      this.$router.push('/goods/add')
     }
   }
 }
