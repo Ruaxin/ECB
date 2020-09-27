@@ -40,6 +40,14 @@ html, body, #app {
   margin-top: 15px;
 }
 
+.el-steps {
+  margin: 15px 0;
+}
+
+.el-step__title {
+  font-size: 13px;
+}
+
 // 更改添加用户输入框的验证颜色
 .el-form-item.is-success .el-input__inner, .el-form-item.is-success .el-input__inner:focus, .el-form-item.is-success .el-textarea__inner, .el-form-item.is-success .el-textarea__inner:focus {
   border-color: #67C23A
