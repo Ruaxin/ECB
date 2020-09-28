@@ -35,6 +35,7 @@
         <el-tabs
           tab-position="left"
           :before-leave="beforeTAbLeave"
+          @tab-click="tabClicked"
           v-model="activeIndex">
           <el-tab-pane label="基本信息" name="0">
             <el-form-item label="商品名称" prop="goods_name">
@@ -148,6 +149,9 @@ export default {
         this.$message.warning('请选择商品分类')
         return false
       }
+    },
+    tabClicked(){
+      console.log(111)
     }
   }
 }
