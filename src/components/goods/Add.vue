@@ -34,6 +34,7 @@
         label-width="100px">
         <el-tabs
           tab-position="left"
+          :before-leave="beforeTAbLeave"
           v-model="activeIndex">
           <el-tab-pane label="基本信息" name="0">
             <el-form-item label="商品名称" prop="goods_name">
@@ -142,6 +143,12 @@ export default {
         this.addForm.goods_cat = []
       }
     },
+    beforeTAbLeave (activeName, oldActiveName) {
+      if (oldActiveName === '0' && this.addForm.goods_cat.length !== 3) {
+        this.$message.warning('请选择商品分类')
+        return false
+      }
+    }
   }
 }
 </script>
