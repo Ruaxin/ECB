@@ -48,6 +48,13 @@
             <el-form-item label="商品数量" prop="goods_number">
               <el-input v-model="addForm.goods_number" type="number"/>
             </el-form-item>
+            <el-form-item label="商品分类" prop="goods_cat">
+              <el-cascader
+                v-model="addForm.goods_cat"
+                :options="cateList"
+                :props="cateProps"
+                @change="handleChange"></el-cascader>
+            </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="商品参数" name="1">配置管理</el-tab-pane>
           <el-tab-pane label="商品属性" name="2">角色管理</el-tab-pane>
@@ -70,6 +77,7 @@ export default {
         goods_price: 0,
         goods_weight: 0,
         goods_number: 0,
+        goods_cat: []
       },
       addFormRules: {
         goods_name: [
@@ -99,11 +107,42 @@ export default {
             message: '请输入商品数量',
             trigger: 'blur'
           }
+        ],
+        goods_cat: [
+          {
+            required: true,
+            message: '请选择入商品分类',
+            trigger: 'blur'
+          }
         ]
       },
+      cateList: [],
+      cateProps: {
+        expandTrigger: 'hover',
+        label: 'cat_name',
+        value: 'cat_id',
+        children: 'children'
+      }
     }
   },
-  methods: {}
+  created () {
+    this.getCateList()
+  },
+  methods: {
+    async getCateList () {
+      const { data: res } = await this.$http.get('categories')
+      if (res.meta.status === 200) {
+        this.cateList = res.data
+      } else {
+        this.$message.error('获取商品分类失败')
+      }
+    },
+    handleChange () {
+      if (this.addForm.goods_cat.length !== 3) {
+        this.addForm.goods_cat = []
+      }
+    },
+  }
 }
 </script>
 
