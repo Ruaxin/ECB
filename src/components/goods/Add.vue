@@ -98,6 +98,7 @@
               ref="myQuillEditor"
               v-model="addForm.goods_introduce"/>
           </el-tab-pane>
+          <el-button type="primary">添加商品</el-button>
         </el-tabs>
       </el-form>
     </el-card>

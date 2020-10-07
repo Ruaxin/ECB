@@ -65,7 +65,7 @@
 <script>
 export default {
   name: 'List',
-  data () {
+  data() {
     return {
       // 查询
       queryInfo: {
@@ -77,12 +77,12 @@ export default {
       total: 0,
     }
   },
-  created () {
+  created() {
     this.getGoodsList()
   },
   methods: {
-    async getGoodsList () {
-      const { data: res } = await this.$http.get('goods', {
+    async getGoodsList() {
+      const {data: res} = await this.$http.get('goods', {
         params: this.queryInfo
       })
       if (res.meta.status === 200) {
@@ -92,15 +92,15 @@ export default {
         this.$message.error('获取商品列表失败')
       }
     },
-    handleSizeChange (newSize) {
+    handleSizeChange(newSize) {
       this.queryInfo.pagesize = newSize
       this.getGoodsList()
     },
-    handleCurrentChange (newPage) {
+    handleCurrentChange(newPage) {
       this.queryInfo.pagenum = newPage
       this.getGoodsList()
     },
-    async removeById (id) {
+    async removeById(id) {
       const confirmResult = await this.$confirm('此操作将永久删除该商品, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -109,7 +109,7 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已取消删除！')
       }
-      const { data: res } = await this.$http.delete(`goods/${id}`)
+      const {data: res} = await this.$http.delete(`goods/${id}`)
       if (res.meta.status === 200) {
         this.$message.success('删除成功')
         this.getGoodsList()
@@ -117,7 +117,7 @@ export default {
         this.$message.error('删除失败')
       }
     },
-    goAddpage(){
+    goAddpage() {
       this.$router.push('/goods/add')
     }
   }

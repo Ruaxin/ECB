@@ -27,17 +27,17 @@
 <script>
 export default {
   name: 'Rights',
-  data () {
+  data() {
     return {
       rightsList: []
     }
   },
-  created () {
+  created() {
     this.getRightsList()
   },
   methods: {
-    async getRightsList () {
-      const { data: res } = await this.$http.get('rights/list')
+    async getRightsList() {
+      const {data: res} = await this.$http.get('rights/list')
       if (res.meta.status === 200) {
         this.rightsList = res.data
       } else {

@@ -182,7 +182,7 @@
 <script>
 export default {
   name: 'Users',
-  data () {
+  data() {
     // 自定义验证
     const checkEmail = (rule, value, callback) => {
       // 邮箱正则
@@ -305,12 +305,12 @@ export default {
       selectedRoleId: ''
     }
   },
-  created () {
+  created() {
     this.getUserList()
   },
   methods: {
-    async getUserList () {
-      const { data: res } = await this.$http.get('users', { params: this.queryInfo })
+    async getUserList() {
+      const {data: res} = await this.$http.get('users', {params: this.queryInfo})
       if (res.meta.status === 200) {
         this.userList = res.data.users
         this.total = res.data.total
@@ -319,30 +319,30 @@ export default {
       }
     },
     // switch开关监听
-    async userStateChange (userInfo) {
-      const { data: res } = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
+    async userStateChange(userInfo) {
+      const {data: res} = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
       if (res.meta.status === 200) {
         this.$message.success('更新用户状态成功')
       } else {
         this.$message.error('更新用户状态失败')
       }
     },
-    handleSizeChange (newSize) {
+    handleSizeChange(newSize) {
       this.queryInfo.pagesize = newSize
       this.getUserList()
     },
-    handleCurrentChange (newPage) {
+    handleCurrentChange(newPage) {
       this.queryInfo.pagenum = newPage
       this.getUserList()
     },
     // 添加用户重置
-    addDialogClosed () {
+    addDialogClosed() {
       this.$refs.addFormRef.resetFields()
     },
-    addUser () {
+    addUser() {
       this.$refs.addFormRef.validate(async (valid) => {
         if (valid) {
-          const { data: res } = await this.$http.post('users', this.addForm)
+          const {data: res} = await this.$http.post('users', this.addForm)
           if (res.meta.status === 201) {
             this.$message.success('添加用户成功')
             // 隐藏对话框
@@ -356,8 +356,8 @@ export default {
       })
     },
     // 编辑用户
-    async showEditDialog (id) {
-      const { data: res } = await this.$http.get(`users/${id}`)
+    async showEditDialog(id) {
+      const {data: res} = await this.$http.get(`users/${id}`)
       if (res.meta.status === 200) {
         this.editForm = res.data
         this.editDialogVisible = true
@@ -365,13 +365,13 @@ export default {
         this.$message.error('查询用户信息失败')
       }
     },
-    editDialogClosed () {
+    editDialogClosed() {
       this.$refs.editFormRef.resetFields()
     },
-    editUserInfo () {
+    editUserInfo() {
       this.$refs.editFormRef.validate(async (valid) => {
         if (valid) {
-          const { data: res } = await this.$http.put(`users/${this.editForm.id}`, this.editForm)
+          const {data: res} = await this.$http.put(`users/${this.editForm.id}`, this.editForm)
           if (res.meta.status === 200) {
             this.$message.success('修改成功')
             this.editDialogVisible = false
@@ -383,14 +383,14 @@ export default {
       })
     },
     // 删除
-    async removeUserById (id) {
+    async removeUserById(id) {
       const confirmResult = await this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).catch(error => error)
       if (confirmResult === 'confirm') {
-        const { data: res } = await this.$http.delete(`users/${id}`)
+        const {data: res} = await this.$http.delete(`users/${id}`)
         if (res.meta.status === 200) {
           this.$message.success('删除用户成功')
           await this.getUserList()
@@ -402,9 +402,9 @@ export default {
       }
     },
     // 分配角色
-    async setRole (userInfo) {
+    async setRole(userInfo) {
       this.userInfo = userInfo
-      const { data: res } = await this.$http.get('roles')
+      const {data: res} = await this.$http.get('roles')
       if (res.meta.status === 200) {
         this.rolesList = res.data
       } else {
@@ -412,11 +412,11 @@ export default {
       }
       this.setRoleDialogVisible = true
     },
-    async saveRoleInfo () {
+    async saveRoleInfo() {
       if (!this.selectedRoleId) {
         return this.$message.warning('请选择要分配的角色')
       }
-      const { data: res } = await this.$http.put(`users/${this.userInfo.id}/role`, { rid: this.selectedRoleId })
+      const {data: res} = await this.$http.put(`users/${this.userInfo.id}/role`, {rid: this.selectedRoleId})
       if (res.meta.status === 200) {
         this.$message.success('更新角色成功')
         await this.getUserList()
@@ -425,7 +425,7 @@ export default {
       }
       this.setRoleDialogVisible = false
     },
-    setRoleDialogClosed () {
+    setRoleDialogClosed() {
       this.selectedRoleId = ''
       this.userInfo = {}
     }

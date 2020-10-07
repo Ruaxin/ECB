@@ -189,7 +189,7 @@
 <script>
 export default {
   name: 'Params',
-  data () {
+  data() {
     return {
       cateList: [],
       propsList: {
@@ -224,32 +224,32 @@ export default {
       },
     }
   },
-  created () {
+  created() {
     this.getCateList()
   },
   methods: {
-    async getCateList () {
-      const { data: res } = await this.$http.get('categories')
+    async getCateList() {
+      const {data: res} = await this.$http.get('categories')
       if (res.meta.status === 200) {
         this.cateList = res.data
       } else {
         this.$message.error('商品分类数据列表失败')
       }
     },
-    handleChange () {
+    handleChange() {
       this.getParamsData()
     },
-    handleTabClick () {
+    handleTabClick() {
       this.getParamsData()
     },
-    async getParamsData () {
+    async getParamsData() {
       if (this.selectedCateKeys.length !== 3) {
         this.selectedCateKeys = []
         this.manyTableData = []
         this.onlyTableData = []
       }
       if (this.selectedCateKeys.length === 3) {
-        const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes`, { params: { sel: this.activeName } })
+        const {data: res} = await this.$http.get(`categories/${this.cateId}/attributes`, {params: {sel: this.activeName}})
         if (res.meta.status === 200) {
           res.data.forEach(item => {
             item.attr_vals = item.attr_vals ? item.attr_vals.split(' ') : []
@@ -266,13 +266,13 @@ export default {
         this.selectedCateKeys = []
       }
     },
-    addDialogClosed () {
+    addDialogClosed() {
       this.$refs.addFormRef.resetFields()
     },
-    addParams () {
+    addParams() {
       this.$refs.addFormRef.validate(async valid => {
         if (valid) {
-          const { data: res } = await this.$http.post(`categories/${this.cateId}/attributes`, {
+          const {data: res} = await this.$http.post(`categories/${this.cateId}/attributes`, {
             attr_name: this.addForm.attr_name,
             attr_sel: this.activeName
           })
@@ -286,9 +286,9 @@ export default {
         }
       })
     },
-    async showEditDialog (attr_id) {
-      const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes/${attr_id}`, {
-        params: { attr_sel: this.activeName }
+    async showEditDialog(attr_id) {
+      const {data: res} = await this.$http.get(`categories/${this.cateId}/attributes/${attr_id}`, {
+        params: {attr_sel: this.activeName}
       })
       if (res.meta.status === 200) {
         this.editForm = res.data
@@ -297,13 +297,13 @@ export default {
       }
       this.editDialogVisible = true
     },
-    editDialogClosed () {
+    editDialogClosed() {
       this.$refs.editFormRef.resetFields()
     },
-    editParams () {
+    editParams() {
       this.$refs.editFormRef.validate(async valid => {
         if (valid) {
-          const { data: res } = await this.$http.put(`categories/${this.cateId}/attributes/${this.editForm.attr_id}`, {
+          const {data: res} = await this.$http.put(`categories/${this.cateId}/attributes/${this.editForm.attr_id}`, {
             attr_name: this.editForm.attr_name,
             attr_sel: this.activeName
           })
@@ -317,7 +317,7 @@ export default {
         }
       })
     },
-    async removeParams (attr_id) {
+    async removeParams(attr_id) {
       const confirmResult = await this.$confirm('此操作将永久删除该参数, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -326,7 +326,7 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已取消删除')
       }
-      const { data: res } = await this.$http.delete(`categories/${this.cateId}/attributes/${attr_id}`)
+      const {data: res} = await this.$http.delete(`categories/${this.cateId}/attributes/${attr_id}`)
       if (res.meta.status === 200) {
         this.$message.success('删除成功')
       } else {
@@ -335,8 +335,8 @@ export default {
       this.editDialogVisible = false
       await this.getParamsData()
     },
-    async saveAttrVals (row) {
-      const { data: res } = await this.$http.put(`categories/${this.cateId}/attributes/${row.attr_id}`, {
+    async saveAttrVals(row) {
+      const {data: res} = await this.$http.put(`categories/${this.cateId}/attributes/${row.attr_id}`, {
         attr_name: row.attr_name,
         attr_sel: row.attr_sel,
         attr_vals: row.attr_vals.join(' ')
@@ -347,7 +347,7 @@ export default {
         this.$message.error('修改参数失败')
       }
     },
-    handleInputConfirm (row) {
+    handleInputConfirm(row) {
       if (row.inputValue.trim().length === 0) {
         row.inputVisible = ''
         row.inputVisible = false
@@ -358,29 +358,29 @@ export default {
       row.inputValue = ''
       this.saveAttrVals(row)
     },
-    showInput (row) {
+    showInput(row) {
       row.inputVisible = true
       this.$nextTick(_ => {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-    handleClose (i, row) {
+    handleClose(i, row) {
       row.attr_vals.splice(i, 1)
       this.saveAttrVals(row)
     }
   },
   computed: {
-    isBtnDisabled () {
+    isBtnDisabled() {
       return this.selectedCateKeys.length !== 3
     },
-    cateId () {
+    cateId() {
       if (this.selectedCateKeys.length === 3) {
         return this.selectedCateKeys[2]
       } else {
         return null
       }
     },
-    titleText () {
+    titleText() {
       return this.activeName === 'many' ? '动态参数' : '静态属性'
     }
   }

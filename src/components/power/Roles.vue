@@ -154,7 +154,7 @@
 <script>
 export default {
   name: 'Roles',
-  data () {
+  data() {
     return {
       roleList: [],
       addDialogVisible: false,
@@ -218,12 +218,12 @@ export default {
       roleId: '',
     }
   },
-  created () {
+  created() {
     this.getRolesList()
   },
   methods: {
-    async getRolesList () {
-      const { data: res } = await this.$http.get('roles')
+    async getRolesList() {
+      const {data: res} = await this.$http.get('roles')
       if (res.meta.status === 200) {
         this.roleList = res.data
       } else {
@@ -231,13 +231,13 @@ export default {
       }
     },
     // 添加角色
-    addDialogClosed () {
+    addDialogClosed() {
       this.$refs.addFormRef.resetFields()
     },
-    addRoles () {
+    addRoles() {
       this.$refs.addFormRef.validate(async (valid) => {
         if (valid) {
-          const { data: res } = await this.$http.post('roles', this.addForm)
+          const {data: res} = await this.$http.post('roles', this.addForm)
           if (res.meta.status === 201) {
             this.$message.success('添加角色成功')
             // 隐藏对话框
@@ -251,8 +251,8 @@ export default {
       })
     },
     // 修改角色
-    async showEditDialog (id) {
-      const { data: res } = await this.$http.get(`roles/${id}`)
+    async showEditDialog(id) {
+      const {data: res} = await this.$http.get(`roles/${id}`)
       if (res.meta.status === 200) {
         this.editForm = res.data
         this.editDialogVisible = true
@@ -260,13 +260,13 @@ export default {
         this.$message.error('查询用户信息失败')
       }
     },
-    editDialogClosed () {
+    editDialogClosed() {
       this.$refs.editFormRef.resetFields()
     },
-    editRolesInfo () {
+    editRolesInfo() {
       this.$refs.editFormRef.validate(async (valid) => {
         if (valid) {
-          const { data: res } = await this.$http.put(`roles/${this.editForm.roleId}`, this.editForm)
+          const {data: res} = await this.$http.put(`roles/${this.editForm.roleId}`, this.editForm)
           if (res.meta.status === 200) {
             this.$message.success('修改成功')
             this.editDialogVisible = false
@@ -278,14 +278,14 @@ export default {
       })
     },
     // 删除
-    async removeRolesById (id) {
+    async removeRolesById(id) {
       const confirmResult = await this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).catch(error => error)
       if (confirmResult === 'confirm') {
-        const { data: res } = await this.$http.delete(`roles/${id}`)
+        const {data: res} = await this.$http.delete(`roles/${id}`)
         if (res.meta.status === 200) {
           this.$message.success('删除角色成功')
           await this.getRolesList()
@@ -297,7 +297,7 @@ export default {
       }
     },
     // 删除三级权限
-    async removeRightById (role, rightId) {
+    async removeRightById(role, rightId) {
       const confirmResult = await this.$confirm('此操作将永久删除该权限，是否继续？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -306,7 +306,7 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('取消了删除')
       }
-      const { data: res } = await this.$http.delete(`roles/${role.id}/rights/${rightId}`)
+      const {data: res} = await this.$http.delete(`roles/${role.id}/rights/${rightId}`)
       if (res.meta.status === 200) {
         this.$message.success('删除权限成功')
         role.children = res.data
@@ -315,9 +315,9 @@ export default {
       }
     },
     // 分配权限
-    async showSetRightDialog (role) {
+    async showSetRightDialog(role) {
       this.roleId = role.id
-      const { data: res } = await this.$http.get('rights/tree')
+      const {data: res} = await this.$http.get('rights/tree')
       if (res.meta.status === 200) {
         this.rightsList = res.data
       } else {
@@ -328,7 +328,7 @@ export default {
       this.setRightDialogVisible = true
     },
     // 通过递归的形式获取三级权限的id
-    getLeafKeys (node, arr) {
+    getLeafKeys(node, arr) {
       if (!node.children) {
         return arr.push(node.id)
       }
@@ -337,17 +337,17 @@ export default {
       })
     },
     // 清空之前的权限
-    setRightDialogClosed () {
+    setRightDialogClosed() {
       this.defKeys = []
     },
     // 新增权限
-    async allotRights () {
+    async allotRights() {
       const keys = [
         ...this.$refs.treeRef.getCheckedKeys(),
         ...this.$refs.treeRef.getHalfCheckedKeys()
       ]
       const idStr = keys.join(',')
-      const { data: res } = await this.$http.post(`roles/${this.roleId}/rights`, { rids: idStr })
+      const {data: res} = await this.$http.post(`roles/${this.roleId}/rights`, {rids: idStr})
       if (res.meta.status === 200) {
         this.$message.success('分配权限成功')
       } else {

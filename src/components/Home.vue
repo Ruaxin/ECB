@@ -55,11 +55,11 @@
 <script>
 export default {
   name: 'Home',
-  created () {
+  created() {
     this.getMenuList()
     this.activePath = window.sessionStorage.getItem('activePath')
   },
-  data () {
+  data() {
     return {
       menuList: [],
       iconsObj: {
@@ -75,21 +75,21 @@ export default {
   },
   methods: {
     // 登录
-    logout () {
+    logout() {
       window.sessionStorage.clear()
       this.$router.push('/login')
     },
     // 获取侧边栏菜单
-    async getMenuList () {
-      const { data: res } = await this.$http.get('menus')
+    async getMenuList() {
+      const {data: res} = await this.$http.get('menus')
       if (res.meta.status === 200) {
         this.menuList = res.data
       }
     },
-    toggleCollapse () {
+    toggleCollapse() {
       this.isCollapse = !this.isCollapse
     },
-    saveNavState (activePath) {
+    saveNavState(activePath) {
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath
     }

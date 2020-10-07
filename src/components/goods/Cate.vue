@@ -93,7 +93,7 @@
 <script>
 export default {
   name: 'Cate',
-  data () {
+  data() {
     return {
       // 商品分类的数据列表
       cateList: [],
@@ -156,13 +156,13 @@ export default {
       selectedKeys: []
     }
   },
-  created () {
+  created() {
     this.getCateList()
   },
   methods: {
     // 获取商品分类数据
-    async getCateList () {
-      const { data: res } = await this.$http.get('categories', { params: this.querInfo })
+    async getCateList() {
+      const {data: res} = await this.$http.get('categories', {params: this.querInfo})
       if (res.meta.status === 200) {
         this.cateList = res.data.result
         this.total = res.data.total
@@ -171,28 +171,28 @@ export default {
       }
     },
     // 改变页面显示数
-    handleSizeChange (newSize) {
+    handleSizeChange(newSize) {
       this.querInfo.pagesize = newSize
       this.getCateList()
     },
-    handleCurrentChange (newPage) {
+    handleCurrentChange(newPage) {
       this.querInfo.pagenum = newPage
       this.getCateList()
     },
-    showAddCateDialog () {
+    showAddCateDialog() {
       this.getParentCateList()
       this.addCateDialogVisible = true
     },
     // 获取父级分类的数据列表
-    async getParentCateList () {
-      const { data: res } = await this.$http.get('categories', { params: { type: 2 } })
+    async getParentCateList() {
+      const {data: res} = await this.$http.get('categories', {params: {type: 2}})
       if (res.meta.status === 200) {
         this.parentCateList = res.data
       } else {
         this.$message.error('获取父级分类数据列表失败')
       }
     },
-    parentCateChange () {
+    parentCateChange() {
       if (this.selectedKeys.length > 0) {
         this.addCateForm.cat_pid = this.selectedKeys[this.selectedKeys.length - 1]
         this.addCateForm.cat_level = this.selectedKeys.length
@@ -201,10 +201,10 @@ export default {
         this.addCateForm.cat_level = 0
       }
     },
-    addCate () {
+    addCate() {
       this.$refs.addCateFormRef.validate(async valid => {
         if (valid) {
-          const { data: res } = await this.$http.post('categories', this.addCateForm)
+          const {data: res} = await this.$http.post('categories', this.addCateForm)
           if (res.meta.status === 201) {
             this.$message.success('商品分类创建成功')
             await this.getCateList()
@@ -216,7 +216,7 @@ export default {
         }
       })
     },
-    addCateDialogClose () {
+    addCateDialogClose() {
       this.$refs.addCateFormRef.resetFields()
       this.addCateForm.cat_pid = 0
       this.addCateForm.cat_level = 0

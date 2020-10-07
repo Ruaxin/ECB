@@ -35,7 +35,7 @@
 <script>
 export default {
   name: 'Login',
-  data () {
+  data() {
     return {
       loginForm: {
         username: 'admin',
@@ -73,14 +73,14 @@ export default {
     }
   },
   methods: {
-    resetLoginForm () {
+    resetLoginForm() {
       // resetFields方法是ele提供的
       this.$refs.loginFormRef.resetFields()
     },
-    login () {
+    login() {
       this.$refs.loginFormRef.validate(async (valid) => {
         if (valid) {
-          const { data: res } = await this.$http.post('login', this.loginForm)
+          const {data: res} = await this.$http.post('login', this.loginForm)
           if (res.meta.status === 200) {
             this.$message.success('登录成功')
             //存入token
