@@ -128,6 +128,7 @@ export default {
         goods_cat: [],
         pics: [],
         goods_introduce: '',
+        attrs: []
       },
       addFormRules: {
         goods_name: [
@@ -257,6 +258,18 @@ export default {
           }
           const form = _.cloneDeep(this.addForm)
           form.goods_cat = form.goods_cat.join(',')
+          // 动态
+          this.manyTableData.forEach(item => {
+            const newInfo = {attr_id: item.attr_id, attr_value: item.attr_vals.join(' ')}
+            this.addForm.attrs.push(newInfo)
+          })
+          // 静态
+          this.onlyTableData.forEach(item => {
+            const newInfo = {attr_id: item.attr_id, attr_value: item.attr_vals}
+            this.addForm.attrs.push(newInfo)
+          })
+          form.attrs = this.addForm.attrs
+          console.log(form)
         }
       )
     }
