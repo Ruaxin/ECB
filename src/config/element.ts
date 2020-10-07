@@ -32,7 +32,9 @@ import {
   Tabs,
   TabPane,
   Steps,
-  Step
+  Step,
+  Checkbox,
+  CheckboxGroup
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import Vue from 'vue';
@@ -70,5 +72,7 @@ Vue.use(Tabs);
 Vue.use(TabPane);
 Vue.use(Steps);
 Vue.use(Step);
+Vue.use(Checkbox);
+Vue.use(CheckboxGroup);
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

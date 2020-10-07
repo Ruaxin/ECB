@@ -58,7 +58,21 @@
                 @change="handleChange"></el-cascader>
             </el-form-item>
           </el-tab-pane>
-          <el-tab-pane label="商品参数" name="1">配置管理</el-tab-pane>
+          <el-tab-pane label="商品参数" name="1">
+            <el-form-item
+              :label="item.attr_name"
+              v-for="item in manyTableData"
+              :key="item.attr_id">
+              <el-checkbox-group v-model="item.attr_vals">
+                <el-checkbox
+                  border
+                  v-for="(cb,i) in item.attr_vals"
+                  :key="i"
+                  :label="cb">
+                </el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-tab-pane>
           <el-tab-pane label="商品属性" name="2">角色管理</el-tab-pane>
           <el-tab-pane label="商品图片" name="3">定时任务补偿</el-tab-pane>
           <el-tab-pane label="商品内容" name="4">定时任务补偿</el-tab-pane>
@@ -71,7 +85,7 @@
 <script>
 export default {
   name: 'Add',
-  data () {
+  data() {
     return {
       activeIndex: '0',
       addForm: {
@@ -124,34 +138,53 @@ export default {
         label: 'cat_name',
         value: 'cat_id',
         children: 'children'
-      }
+      },
+      manyTableData: [],
     }
   },
-  created () {
+  created() {
     this.getCateList()
   },
   methods: {
-    async getCateList () {
-      const { data: res } = await this.$http.get('categories')
+    async getCateList() {
+      const {data: res} = await this.$http.get('categories')
       if (res.meta.status === 200) {
         this.cateList = res.data
       } else {
         this.$message.error('获取商品分类失败')
       }
     },
-    handleChange () {
+    handleChange() {
       if (this.addForm.goods_cat.length !== 3) {
         this.addForm.goods_cat = []
       }
     },
-    beforeTAbLeave (activeName, oldActiveName) {
+    beforeTAbLeave(activeName, oldActiveName) {
       if (oldActiveName === '0' && this.addForm.goods_cat.length !== 3) {
         this.$message.warning('请选择商品分类')
         return false
       }
     },
-    tabClicked(){
-      console.log(111)
+    async tabClicked() {
+      if (this.activeIndex === '1') {
+        const {data: res} = await this.$http.get(`categories/${this.cateId}/attributes`, {params: {sel: 'many'}})
+        if (res.meta.status === 200) {
+          res.data.forEach(item => {
+            item.attr_vals = item.attr_vals.length === 0 ? [] : item.attr_vals.split(' ')
+          })
+          this.manyTableData = res.data
+        } else {
+          this.$message.error('获取动态参数列表失败！')
+        }
+      }
+    }
+  },
+  computed: {
+    cateId() {
+      if (this.addForm.goods_cat.length === 3) {
+        return this.addForm.goods_cat[2]
+      }
+      return null
     }
   }
 }
