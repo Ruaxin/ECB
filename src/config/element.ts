@@ -34,7 +34,8 @@ import {
   Steps,
   Step,
   Checkbox,
-  CheckboxGroup
+  CheckboxGroup,
+  Upload
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import Vue from 'vue';
@@ -74,5 +75,6 @@ Vue.use(Steps);
 Vue.use(Step);
 Vue.use(Checkbox);
 Vue.use(CheckboxGroup);
+Vue.use(Upload);
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

@@ -81,7 +81,17 @@
               <el-input v-model="item.attr_vals"/>
             </el-form-item>
           </el-tab-pane>
-          <el-tab-pane label="商品图片" name="3">定时任务补偿</el-tab-pane>
+          <el-tab-pane label="商品图片" name="3">
+            <el-upload
+              :headers="headerObj"
+              class="upload-demo"
+              :action="uploadURL"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              list-type="picture">
+              <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
+          </el-tab-pane>
           <el-tab-pane label="商品内容" name="4">定时任务补偿</el-tab-pane>
         </el-tabs>
       </el-form>
@@ -148,6 +158,10 @@ export default {
       },
       manyTableData: [],
       onlyTableData: [],
+      uploadURL: 'http://127.0.0.1:8888/api/private/v1/upload',
+      headerObj: {
+        Authorization: window.sessionStorage.getItem('token')
+      }
     }
   },
   created() {
@@ -192,7 +206,13 @@ export default {
           this.$message.error('获取静态属性列表失败！')
         }
       }
-    }
+    },
+    handlePreview() {
+      console.log(111)
+    },
+    handleRemove() {
+      console.log(111)
+    },
   },
   computed: {
     cateId() {
