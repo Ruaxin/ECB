@@ -97,6 +97,15 @@
         </el-tabs>
       </el-form>
     </el-card>
+    <el-dialog
+      title="图片预览"
+      width="50%"
+      :visible.sync="previewVisible">
+      <img
+        :src="previewPath"
+        class="previewImg"
+        :alt="previewName">
+    </el-dialog>
   </div>
 </template>
 
@@ -163,7 +172,10 @@ export default {
       uploadURL: 'http://127.0.0.1:8888/api/private/v1/upload',
       headerObj: {
         Authorization: window.sessionStorage.getItem('token')
-      }
+      },
+      previewPath: '',
+      previewName: '',
+      previewVisible: false,
     }
   },
   created() {
@@ -209,8 +221,11 @@ export default {
         }
       }
     },
-    handlePreview() {
-      console.log(111)
+    handlePreview(file) {
+      this.previewPath = file.response.data.url
+      this.previewName = file.name.split('.')[0]
+      this.previewVisible = true
+      console.log(this.previewName)
     },
     handleRemove(file) {
       // 获取要删除的图片的临时路径
@@ -221,23 +236,17 @@ export default {
       })
       // 调用数组的splice方法，把普通信息对象，从pics数组中移除
       this.addForm.pics.splice(i, 1)
-      console.log(this.addForm.pics)
     },
     handleSuccess(response) {
       // 拼接得到一个图片信息对象
       const picInfo = {pic: response.data.tmp_path}
       // 将图片信息对象，push到pics数组里
       this.addForm.pics.push(picInfo)
-      console.log(this.addForm.pics)
-
     }
   },
   computed: {
     cateId() {
-      if (this.addForm.goods_cat.length === 3) {
-        return this.addForm.goods_cat[2]
-      }
-      return null
+      return this.addForm.goods_cat.length === 3 ? this.addForm.goods_cat[2] : null
     }
   }
 }
@@ -246,5 +255,9 @@ export default {
 <style lang="scss" scoped>
 .el-checkbox {
   margin: 0 5px 0 0 !important;
+}
+
+.previewImg {
+  width: 100%;
 }
 </style>
