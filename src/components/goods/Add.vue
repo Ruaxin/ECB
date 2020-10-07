@@ -73,7 +73,14 @@
               </el-checkbox-group>
             </el-form-item>
           </el-tab-pane>
-          <el-tab-pane label="商品属性" name="2">角色管理</el-tab-pane>
+          <el-tab-pane label="商品属性" name="2">
+            <el-form-item
+              v-for="item in onlyTableData"
+              :key="item.attr_id"
+              :label="item.attr_name">
+              <el-input v-model="item.attr_vals"/>
+            </el-form-item>
+          </el-tab-pane>
           <el-tab-pane label="商品图片" name="3">定时任务补偿</el-tab-pane>
           <el-tab-pane label="商品内容" name="4">定时任务补偿</el-tab-pane>
         </el-tabs>
@@ -140,6 +147,7 @@ export default {
         children: 'children'
       },
       manyTableData: [],
+      onlyTableData: [],
     }
   },
   created() {
@@ -175,6 +183,13 @@ export default {
           this.manyTableData = res.data
         } else {
           this.$message.error('获取动态参数列表失败！')
+        }
+      } else if (this.activeIndex === '2') {
+        const {data: res} = await this.$http.get(`categories/${this.cateId}/attributes`, {params: {sel: 'only'}})
+        if (res.meta.status === 200) {
+          this.onlyTableData = res.data
+        } else {
+          this.$message.error('获取静态属性列表失败！')
         }
       }
     }
