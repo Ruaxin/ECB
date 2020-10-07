@@ -93,7 +93,11 @@
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
           </el-tab-pane>
-          <el-tab-pane label="商品内容" name="4">定时任务补偿</el-tab-pane>
+          <el-tab-pane label="商品内容" name="4">
+            <quill-editor
+              ref="myQuillEditor"
+              v-model="addForm.goods_introduce"/>
+          </el-tab-pane>
         </el-tabs>
       </el-form>
     </el-card>
@@ -121,7 +125,8 @@ export default {
         goods_weight: 0,
         goods_number: 0,
         goods_cat: [],
-        pics: []
+        pics: [],
+        goods_introduce: '',
       },
       addFormRules: {
         goods_name: [
