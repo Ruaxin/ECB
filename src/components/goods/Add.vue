@@ -94,11 +94,9 @@
             </el-upload>
           </el-tab-pane>
           <el-tab-pane label="商品内容" name="4">
-            <quill-editor
-              ref="myQuillEditor"
-              v-model="addForm.goods_introduce"/>
+            <quill-editor v-model="addForm.goods_introduce"/>
+            <el-button type="primary" class="btnAdd" @click="add">添加商品</el-button>
           </el-tab-pane>
-          <el-button type="primary">添加商品</el-button>
         </el-tabs>
       </el-form>
     </el-card>
@@ -248,6 +246,15 @@ export default {
       const picInfo = {pic: response.data.tmp_path}
       // 将图片信息对象，push到pics数组里
       this.addForm.pics.push(picInfo)
+    },
+    add() {
+      this.$refs.addFormRef.validate(
+        valid => {
+          if (!valid) {
+            return this.$message.error('请填写必要的表单项！')
+          }
+        }
+      )
     }
   },
   computed: {
@@ -265,5 +272,9 @@ export default {
 
 .previewImg {
   width: 100%;
+}
+
+.btnAdd {
+  margin-top: 15px;
 }
 </style>
