@@ -191,5 +191,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.el-checkbox {
+  margin: 0 5px 0 0 !important;
+}
 </style>
