@@ -35,7 +35,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template>
-            <el-button type="primary" icon="el-icon-edit" size="mini"/>
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="showBox"/>
             <el-button type="success" icon="el-icon-location" size="mini"/>
           </template>
         </el-table-column>
@@ -50,13 +50,33 @@
         :total="total">
       </el-pagination>
     </el-card>
+    <el-dialog
+      title="修改地址"
+      @close="addressDialogClosed"
+      :visible.sync="addressVisible"
+      width="50%">
+      <el-form ref="addressFormRef" :model="addressForm" :rules="addressFormRules" label-width="100px">
+        <el-form-item label="省市区/县" prop="address1">
+          <el-cascader :options="cityData" v-model="addressForm.address1"/>
+        </el-form-item>
+        <el-form-item label="详细地址" prop="address2">
+          <el-input v-model="addressForm.address2"/>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addressVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addressVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import cityData from '@/components/order/citydata.js'
+
 export default {
   name: 'Order',
-  data () {
+  data() {
     return {
       queryInfo: {
         query: '',
@@ -65,14 +85,30 @@ export default {
       },
       total: 0,
       orderList: [],
+      addressVisible: false,
+      addressForm: {
+        address1: [],
+        address2: ''
+      },
+      addressFormRules: {
+        address1: [
+          {
+            required: true, message: '请选择省市区县', trigger: 'blur'
+          }
+        ],
+        address2: [
+          {required: true, message: '请填写详细地址', trigger: 'blur'}
+        ]
+      },
+      cityData
     }
   },
-  created () {
+  created() {
     this.getOrderList()
   },
   methods: {
-    async getOrderList () {
-      const { data: res } = await this.$http.get('orders', { params: this.queryInfo })
+    async getOrderList() {
+      const {data: res} = await this.$http.get('orders', {params: this.queryInfo})
       if (res.meta.status === 200) {
         this.total = res.data.total
         this.orderList = res.data.goods
@@ -80,18 +116,26 @@ export default {
         this.$message.error('')
       }
     },
-    handleSizeChange (newSize) {
+    handleSizeChange(newSize) {
       this.queryInfo.pagesize = newSize
       this.getOrderList()
     },
-    handleCurrentChange (newPage) {
+    handleCurrentChange(newPage) {
       this.queryInfo.pagenum = newPage
       this.getOrderList()
+    },
+    showBox() {
+      this.addressVisible = true
+    },
+    addressDialogClosed() {
+      this.$refs.addressFormRef.resetFields()
     }
   },
 }
 </script>
 
 <style lang="scss" scoped>
-
+.el-cascader {
+  width: 100%;
+}
 </style>
