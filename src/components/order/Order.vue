@@ -36,7 +36,7 @@
         <el-table-column label="操作">
           <template>
             <el-button type="primary" icon="el-icon-edit" size="mini" @click="showBox"/>
-            <el-button type="success" icon="el-icon-location" size="mini"/>
+            <el-button type="success" icon="el-icon-location" size="mini" @click="showProgressBox"/>
           </template>
         </el-table-column>
       </el-table>
@@ -68,6 +68,20 @@
         <el-button type="primary" @click="addressVisible = false">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      title="物流进度"
+      @close="addressDialogClosed"
+      :visible.sync="progressVisible"
+      width="50%">
+      <el-timeline>
+        <el-timeline-item
+          v-for="(activity, index) in progressInfo"
+          :key="index"
+          :timestamp="activity.time">
+          {{ activity.context }}
+        </el-timeline-item>
+      </el-timeline>
+    </el-dialog>
   </div>
 </template>
 
@@ -76,7 +90,7 @@ import cityData from '@/components/order/citydata.js'
 
 export default {
   name: 'Order',
-  data() {
+  data () {
     return {
       queryInfo: {
         query: '',
@@ -93,42 +107,60 @@ export default {
       addressFormRules: {
         address1: [
           {
-            required: true, message: '请选择省市区县', trigger: 'blur'
+            required: true,
+            message: '请选择省市区县',
+            trigger: 'blur'
           }
         ],
         address2: [
-          {required: true, message: '请填写详细地址', trigger: 'blur'}
+          {
+            required: true,
+            message: '请填写详细地址',
+            trigger: 'blur'
+          }
         ]
       },
-      cityData
+      cityData,
+      progressVisible: false,
+      progressInfo: [],
     }
   },
-  created() {
+  created () {
     this.getOrderList()
   },
   methods: {
-    async getOrderList() {
-      const {data: res} = await this.$http.get('orders', {params: this.queryInfo})
+    async getOrderList () {
+      const { data: res } = await this.$http.get('orders', { params: this.queryInfo })
       if (res.meta.status === 200) {
         this.total = res.data.total
         this.orderList = res.data.goods
       } else {
-        this.$message.error('')
+        this.$message.error('获取订单数据失败')
       }
     },
-    handleSizeChange(newSize) {
+    handleSizeChange (newSize) {
       this.queryInfo.pagesize = newSize
       this.getOrderList()
     },
-    handleCurrentChange(newPage) {
+    handleCurrentChange (newPage) {
       this.queryInfo.pagenum = newPage
       this.getOrderList()
     },
-    showBox() {
+    showBox () {
       this.addressVisible = true
     },
-    addressDialogClosed() {
+    addressDialogClosed () {
       this.$refs.addressFormRef.resetFields()
+    },
+    async showProgressBox () {
+      const { data: res } = await this.$http.get('/kuaidi/1106975712662')
+      if (res.meta.status === 200) {
+        this.progressInfo = res.data
+      } else {
+        this.$message.error('获取物流进度失败！')
+      }
+      this.progressVisible = true
+      console.log(this.progressInfo)
     }
   },
 }
