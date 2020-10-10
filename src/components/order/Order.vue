@@ -70,7 +70,6 @@
     </el-dialog>
     <el-dialog
       title="物流进度"
-      @close="addressDialogClosed"
       :visible.sync="progressVisible"
       width="50%">
       <el-timeline>
