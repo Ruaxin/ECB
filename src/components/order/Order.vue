@@ -159,7 +159,6 @@ export default {
         this.$message.error('获取物流进度失败！')
       }
       this.progressVisible = true
-      console.log(this.progressInfo)
     }
   },
 }
